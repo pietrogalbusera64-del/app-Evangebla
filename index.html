@@ -91,6 +91,26 @@
         font-size: 0.9rem;
       }
       .content {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        margin: 0;
+        padding-top: calc(0.5rem + 2.5rem);
+        overflow-y: auto;
+      }
+    }
+      .sidebar img {
+        display: none;
+      }
+      .btn-nav {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .content {
         margin: 0;
         padding-top: calc(0.5rem + 2.5rem);
       }
@@ -186,14 +206,26 @@
       function showSection(id) {
         navSections.forEach(sec => sec.classList.toggle('active', sec.id === id));
         navButtons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-section') === id));
+        // Módulos
+        switch(id) {
+          case 'historial': renderContacts(); break;
+          case 'seguimiento': initSeguimiento(); break;
+          case 'reportes':    renderChart(); break;
+          case 'grupos':      renderGroups(); break;
+          case 'chat':        initChat(); break;
+          case 'bautismo':    renderBaptisms(); break;
+          case 'calendario':  initEventos(); break;
+          default: break;
+        }
       }
       navButtons.forEach(btn => btn.addEventListener('click', function() { showSection(this.getAttribute('data-section')); }));
       showSection('splash');
     });
   </script>
+    <script src="/app-Evangebla/app.js"></script>
   <script>
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/app-Evangebla/service-worker.js');
+    // Service Worker registration
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/app-Evangebla/service-worker.js');('/app-Evangebla/service-worker.js');
   </script>
 </body>
 </html>
-
