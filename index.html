@@ -59,7 +59,7 @@
       <div id="mes-detalle" style="margin:1rem 0;"></div>
       <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
       <button id="export-pdf" class="btn-nav">Exportar a PDF</button>
-      <button id="add-report" class="btn-nav">Reporte</button>
+      <button id="add-report" class="btn-nav" onclick="toggleReportForm()">Reporte</button>
       <div id="form-reporte" style="display:none; margin-top:1rem;">
         <h3>Nuevo Reporte de Comunicación</h3>
         <select id="reporte-contacto"><option value="">Selecciona Miembro</option></select>
@@ -72,6 +72,12 @@
   <script src="/app-Evangebla/app.js"></script>
   <script>
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('/app-Evangebla/service-worker.js');
+  </script>
+  <script>
+    function toggleReportForm() {
+      var f = document.getElementById('form-reporte');
+      f.style.display = (f.style.display === 'block') ? 'none' : 'block';
+    }
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
