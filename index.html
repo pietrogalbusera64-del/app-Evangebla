@@ -17,7 +17,38 @@
     .sidebar img { width: 60px; height: 60px; margin-bottom: 1rem; border-radius: 8px; }
     .btn-nav { width: 100%; background: #0052cc; color: #fff; border: none; text-align: left; padding: 0.75rem 1rem; cursor: pointer; font-size: 0.95rem; transition: background 0.2s; }
     .btn-nav:hover, .btn-nav.active { background: #003d99; }
-    .content { position: absolute; top: 0; left: 200px; right: 0; bottom: 0; padding: 1rem; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .content {
+      /* Contenido con margen a la derecha del sidebar */
+      margin-left: 200px;
+      padding: 1rem;
+    }
+
+    /* Ajuste para pantallas pequeñas */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0.5rem 0;
+      }
+      .sidebar img {
+        display: none;
+      }
+      .btn-nav {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .content {
+        margin-left: 0;
+        padding-top: 60px; /* espacio para menú superior */
+      }
+    }
     .section { display: none; }
     .section.active { display: block; }
     .splash-img { width: 100%; max-width: 400px; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
