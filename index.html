@@ -41,7 +41,8 @@
       font-size: 0.95rem;
       transition: background 0.2s;
     }
-    .btn-nav:hover, .btn-nav.active {
+    .btn-nav:hover,
+    .btn-nav.active {
       background: #003d99;
     }
     /* Main content */
@@ -62,6 +63,32 @@
     table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
     th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
     .chart-container { width: 100%; height: 300px; margin-bottom: 1rem; }
+    /* Responsive: on small screens, convert sidebar to top menu */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0.5rem 0;
+      }
+      .sidebar img {
+        display: none;
+      }
+      .btn-nav {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .content {
+        margin: 0;
+        padding-top: calc(0.5rem + 2.5rem);
+      }
+    }
   </style>
 </head>
 <body>
