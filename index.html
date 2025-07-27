@@ -210,7 +210,25 @@
       const navButtons = document.querySelectorAll('.btn-nav');
       const navSections = document.querySelectorAll('.section');
       function initReportesUI() {
-        const stats = window.getMonthlyStats();
+        // Asegurar snapshot de estadísticas del mes actual
+        const now = new Date();
+        const currentMonth = now.toISOString().slice(0,7);
+        let stats = JSON.parse(localStorage.getItem('monthlyStats') || '{}');
+        if (!stats[currentMonth]) {
+          // Computar snapshot
+          const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+          const interactions = JSON.parse(localStorage.getItem('interactions') || '[]');
+          stats[currentMonth] = {
+            date: currentMonth,
+            totalContacts: contacts.length,
+            decisions: contacts.filter(c => c.aceptoCristo).length,
+            baptisms: contacts.filter(c => c.bautizado).length,
+            discipleships: contacts.filter(c => c.discipulado).length,
+            totalInteractions: interactions.length
+          };
+          localStorage.setItem('monthlyStats', JSON.stringify(stats));
+        }
+        // Rellenar selector
         const select = document.getElementById('mes-select');
         const detalle = document.getElementById('mes-detalle');
         select.innerHTML = '';
@@ -220,6 +238,7 @@
           opt.textContent = month;
           select.appendChild(opt);
         });
+        // Mostrar detalle al cambiar
         select.addEventListener('change', () => {
           const data = stats[select.value];
           detalle.innerHTML = `
@@ -233,6 +252,7 @@
             </ul>
           `;
         });
+        // Disparar primera selección si existe
         if (select.options.length) select.dispatchEvent(new Event('change'));
       }
 
