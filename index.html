@@ -1,166 +1,165 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0052CC">
+  <link rel="manifest" href="/app-Evangebla/manifest.json">
+  <link rel="apple-touch-icon" href="/app-Evangebla/icon.png">
   <title>EVANG_EBLA</title>
-  <link rel="stylesheet" href="style.css" />
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- SheetJS para Excel -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <!-- jsPDF para PDF export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- Leaflet para mapa -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; }
+    /* Sidebar vertical */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 100vh;
+      background: #0052cc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 1rem;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    .sidebar img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+    .btn-nav {
+      width: 100%;
+      background: #0052cc;
+      color: #fff;
+      border: none;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    .btn-nav:hover, .btn-nav.active {
+      background: #003d99;
+    }
+    /* Main content */
+    .content {
+      margin-left: 200px;
+      padding: 1rem;
+    }
+    .section { display: none; }
+    .section.active { display: block; }
+    .splash-img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    form input, form select, form textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.75rem; border: 1px solid #ccc; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+    .chart-container { width: 100%; height: 300px; margin-bottom: 1rem; }
+  </style>
 </head>
 <body>
-  <!-- Splash con menú -->
-  <section id="splash" class="section active">
-    <img src="https://via.placeholder.com/400x200?text=Evangelismo" alt="Evangelismo" class="splash-img" />
-    <h2>Bienvenido a EVANG_EBLA</h2>
-    <div class="menu">
-      <button type="button" data-section="registro" class="btn">Registro</button>
-      <button type="button" data-section="historial" class="btn">Historial</button>
-      <button type="button" data-section="seguimiento" class="btn">Seguimiento</button>
-      <button type="button" data-section="reportes" class="btn">Reportes</button>
-      <button type="button" data-section="grupos" class="btn">Grupos</button>
-      <button type="button" data-section="chat" class="btn">Chat/Oración</button>
-      <button type="button" data-section="calendario" class="btn">Calendario</button>
-    </div>
-  </section>
-
-  <!-- Registro de Contacto -->
-  <section id="registro" class="section">
-    <h2>Registro de Contacto</h2>
-    <form id="form-contacto">
-      <input type="text" id="nombre" name="nombre" placeholder="Nombre" required />
-      <input type="number" id="edad" name="edad" placeholder="Edad" required />
-      <input type="tel" id="telefono" name="telefono" placeholder="Número de teléfono" required />
-      <select id="genero" name="genero" required>
-        <option value="">Género</option>
-        <option value="Masculino">Masculino</option>
-        <option value="Femenino">Femenino</option>
-      </select>
-      <input type="text" id="ubicacion" name="ubicacion" placeholder="Ubicación" />
-      <label><input type="checkbox" id="aceptoCristo" name="aceptoCristo" /> Aceptó a Cristo</label>
-      <label><input type="checkbox" id="bautizado" name="bautizado" /> Bautizado</label>
-      <label><input type="checkbox" id="discipulado" name="discipulado" /> Desea discipulado</label>
-      <textarea id="notas" name="notas" placeholder="Notas adicionales"></textarea>
-      <button type="submit" class="btn">Guardar Contacto</button>
-    </form>
-  </section>
-
-  <!-- Historial de Contactos -->
-  <section id="historial" class="section">
-    <h2>Historial de Contactos</h2>
-    <label>Estado Espiritual:
-      <select id="filtro-estado">
-        <option value="all">Todos</option>
-        <option value="aceptoCristo">Aceptó a Cristo</option>
-        <option value="bautizado">Bautizado</option>
-        <option value="discipulado">Desea Discipulado</option>
-      </select>
-    </label>
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Género</th><th>Ubicación</th><th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="lista-contactos"></tbody>
-    </table>
-    <button type="button" id="export-contactos" class="btn">Exportar Contactos a Excel</button>
-  </section>
-
-  <!-- Mapa de Contactos -->
-  <section id="mapa" class="section">
-    <h2>Mapa de Contactos</h2>
-    <div id="mapid" style="height: 400px;"></div>
-  </section>
-
-  <!-- Seguimiento -->
-  <section id="seguimiento" class="section">
-    <h2>Seguimiento</h2>
-    <form id="form-seguimiento">
-      <select id="contacto-seg" name="contacto-seg" required><option value="">Selecciona contacto</option></select>
-      <input type="date" id="fecha-seg" name="fecha-seg" required />
-      <select id="tipo-seg" name="tipo-seg" required>
-        <option value="Visita">Visita</option>
-        <option value="Llamada">Llamada</option>
-        <option value="Mensaje">Mensaje</option>
-      </select>
-      <textarea id="notas-seg" name="notas-seg" placeholder="Notas de seguimiento"></textarea>
-      <fieldset>
-        <legend>Temas de discipulado</legend>
-        <label><input type="checkbox" value="Oración" class="check-tema" /> Oración</label>
-        <label><input type="checkbox" value="Biblia" class="check-tema" /> Biblia</label>
-        <label><input type="checkbox" value="Fe" class="check-tema" /> Fe</label>
-      </fieldset>
-      <button type="submit" class="btn">Registrar Seguimiento</button>
-    </form>
-    <ul id="lista-seguimiento"></ul>
-    <button type="button" id="export-interacciones" class="btn">Exportar Interacciones a Excel</button>
-  </section>
-
-  <!-- Reportes y Estadísticas -->
-  <section id="reportes" class="section">
-    <h2>Reportes y Estadísticas</h2>
-    <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
-    <button type="button" id="export-pdf" class="btn">Exportar Reporte a PDF</button>
-  </section>
-
-  <!-- Grupos y Discipulados -->
-  <section id="grupos" class="section">
-    <h2>Iglesia y Discipulados</h2>
-    <form id="form-grupo">
-      <input type="text" id="nombre-grupo" name="nombre-grupo" placeholder="Nombre de grupo" required />
-      <select id="miembros-grupo" name="miembros-grupo" multiple></select>
-      <button type="submit" class="btn">Crear Grupo</button>
-    </form>
-    <ul id="lista-grupos"></ul>
-    <button type="button" id="export-grupos" class="btn">Exportar Grupos a Excel</button>
-  </section>
-
-  <!-- Chat y Oración -->
-  <section id="chat" class="section">
-    <h2>Chat y Oración</h2>
-    <form id="form-chat">
-      <input type="text" id="usuario-chat" name="usuario-chat" placeholder="Tu nombre" required />
-      <textarea id="mensaje-chat" name="mensaje-chat" placeholder="Mensaje o petición" required></textarea>
-      <label><input type="checkbox" id="privado-chat" name="privado-chat" /> Privado</label>
-      <button type="submit" class="btn">Enviar Mensaje</button>
-    </form>
-    <ul id="lista-chat"></ul>
-  </section>
-
-  <!-- Calendario de Evangelismo -->
-  <section id="calendario" class="section">
-    <h2>Calendario de Evangelismo</h2>
-    <form id="form-evento">
-      <input type="text" id="nombre-evento" name="nombre-evento" placeholder="Nombre del evento" required />
-      <select id="tipo-evento" name="tipo-evento" required>
-        <option value="Templo">Templo</option>
-        <option value="Callejero">Callejero</option>
-      </select>
-      <input type="date" id="fecha-evento" name="fecha-evento" required />
-      <textarea id="detalles-evento" name="detalles-evento" placeholder="Descripción/Observaciones"></textarea>
-      <button type="submit" class="btn">Programar Evento</button>
-    </form>
-    <ul id="lista-eventos"></ul>
-    <button type="button" id="export-eventos" class="btn">Exportar Eventos a Excel</button>
-  </section>
-
-  <!-- Navegación inferior -->
-  <nav class="nav">
-    <button type="button" data-section="splash" class="btn-nav active">Inicio</button>
-    <button type="button" data-section="registro" class="btn-nav">Registro</button>
-    <button type="button" data-section="historial" class="btn-nav">Historial</button>
-    <button type="button" data-section="seguimiento" class="btn-nav">Seguimiento</button>
-    <button type="button" data-section="reportes" class="btn-nav">Reportes</button>
-    <button type="button" data-section="grupos" class="btn-nav">Grupos</button>
-    <button type="button" data-section="chat" class="btn-nav">Chat</button>
-    <button type="button" data-section="calendario" class="btn-nav">Calendario</button>
-  </nav>
-
-  <script src="app.js"></script>
+  <!-- Sidebar vertical -->
+  <aside class="sidebar">
+    <img src="/app-Evangebla/icon.png" alt="Icono EVANG_EBLA" />
+    <button data-section="splash" class="btn-nav active">Inicio</button>
+    <button data-section="registro" class="btn-nav">Registro</button>
+    <button data-section="historial" class="btn-nav">Historial</button>
+    <button data-section="seguimiento" class="btn-nav">Seguimiento</button>
+    <button data-section="reportes" class="btn-nav">Reportes</button>
+    <button data-section="grupos" class="btn-nav">Grupos</button>
+    <button data-section="chat" class="btn-nav">Chat/Oración</button>
+    <button data-section="bautismo" class="btn-nav">Bautismo</button>
+    <button data-section="calendario" class="btn-nav">Calendario</button>
+  </aside>
+  
+  <!-- Contenido principal -->
+  <main class="content">
+    <section id="splash" class="section active">
+      <img src="/app-Evangebla/splash.png" alt="Splash Evangelismo" class="splash-img" />
+      <h2>Bienvenido a EVANG_EBLA</h2>
+    </section>
+    <section id="registro" class="section">
+      <h2>Registro de Contacto</h2>
+      <form id="form-contacto">
+        <input type="text" name="nombre" placeholder="Nombre" required />
+        <input type="number" name="edad" placeholder="Edad" required />
+        <input type="tel" name="telefono" placeholder="Teléfono" required />
+        <select name="genero" required>
+          <option value="">Género</option><option value="Masculino">Masculino</option><option value="Femenino">Femenino</option>
+        </select>
+        <input type="text" name="ubicacion" placeholder="Ubicación" />
+        <label><input type="checkbox" name="aceptoCristo" /> Aceptó a Cristo</label>
+        <label><input type="checkbox" name="bautizado" /> Bautizado</label>
+        <label><input type="checkbox" name="discipulado" /> Desea discipulado</label>
+        <button type="submit" class="btn-nav">Guardar</button>
+      </form>
+    </section>
+    <section id="historial" class="section">
+      <h2>Historial de Contactos</h2>
+      <select id="filtro-estado"><option value="all">Todos</option><option value="aceptoCristo">Aceptó a Cristo</option><option value="bautizado">Bautizado</option><option value="discipulado">Discipulado</option></select>
+      <table><thead><tr><th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Género</th><th>Ubicación</th><th>Acciones</th></tr></thead><tbody id="lista-contactos"></tbody></table>
+      <button id="export-contactos" class="btn-nav">Exportar a Excel</button>
+    </section>
+    <section id="seguimiento" class="section">
+      <h2>Seguimiento</h2>
+      <form id="form-seguimiento">
+        <select id="contacto-seg" required><option value="">Selecciona contacto</option></select>
+        <input type="date" id="fecha-seg" required />
+        <select id="tipo-seg" required><option>Visita</option><option>Llamada</option><option>Mensaje</option></select>
+        <fieldset><legend>Temas de discipulado</legend><label><input type="checkbox" class="check-tema" value="Oración" /> Oración</label><label><input type="checkbox" class="check-tema" value="Biblia" /> Biblia</label><label><input type="checkbox" class="check-tema" value="Fe" /> Fe</label></fieldset>
+        <button type="submit" class="btn-nav">Registrar</button>
+      </form>
+      <ul id="lista-seguimiento"></ul>
+      <button id="export-interacciones" class="btn-nav">Exportar a Excel</button>
+    </section>
+    <section id="reportes" class="section">
+      <h2>Reportes y Estadísticas</h2>
+      <label for="mes-select">Mes:</label><select id="mes-select"></select>
+      <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
+      <button id="export-pdf" class="btn-nav">Exportar a PDF</button>
+    </section>
+    <section id="grupos" class="section">
+      <h2>Grupos</h2>
+      <form id="form-grupo"><input type="text" id="nombre-grupo" placeholder="Nombre de grupo" required /><select id="miembros-grupo" multiple></select><button type="submit" class="btn-nav">Crear Grupo</button></form>
+      <ul id="lista-grupos"></ul><button id="export-grupos" class="btn-nav">Exportar a Excel</button>
+    </section>
+    <section id="chat" class="section">
+      <h2>Chat y Oración</h2>
+      <form id="form-chat"><input type="text" id="usuario-chat" placeholder="Tu nombre" required /><textarea id="mensaje-chat" placeholder="Mensaje" required></textarea><label><input type="checkbox" id="privado-chat" /> Privado</label><button type="submit" class="btn-nav">Enviar</button></form>
+      <ul id="lista-chat"></ul>
+    </section>
+    <section id="bautismo" class="section">
+      <h2>Calendario de Bautismo</h2>
+      <form id="form-bautismo"><input type="text" id="bautizo-nombre" placeholder="Nombre persona" required /><input type="date" id="bautizo-fecha" required /><button type="submit" class="btn-nav">Agregar Bautismo</button></form>
+      <ul id="lista-bautismos"></ul>
+    </section>
+    <section id="calendario" class="section">
+      <h2>Calendario de Evangelismo</h2>
+      <form id="form-evento"><input type="text" id="nombre-evento" placeholder="Nombre evento" required /><select id="tipo-evento" required><option>Templo</option><option>Callejero</option></select><input type="date" id="fecha-evento" required /><textarea id="detalles-evento" placeholder="Detalles"></textarea><button type="submit" class="btn-nav">Programar Evento</button></form>
+      <ul id="lista-eventos"></ul><button id="export-eventos" class="btn-nav">Exportar a Excel</button>
+    </section>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const navButtons = document.querySelectorAll('.btn-nav');
+      const navSections = document.querySelectorAll('.section');
+      function showSection(id) {
+        navSections.forEach(sec => sec.classList.toggle('active', sec.id === id));
+        navButtons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-section') === id));
+      }
+      navButtons.forEach(btn => btn.addEventListener('click', function() { showSection(this.getAttribute('data-section')); }));
+      showSection('splash');
+    });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/app-Evangebla/service-worker.js');
+  </script>
+</body>
+</html>
