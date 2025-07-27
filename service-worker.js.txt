@@ -6,8 +6,8 @@ const FILES_TO_CACHE = [
   '/app-Evangebla/style.css',
   '/app-Evangebla/app.js',
   '/app-Evangebla/manifest.json',
-  '/app-Evangebla/icon-192.png',
-  '/app-Evangebla/icon-512.png'
+  '/app-Evangebla/icon.png',
+  '/app-Evangebla/splash.png'
 ];
 
 self.addEventListener('install', event => {
