@@ -179,7 +179,7 @@
     <section id="reportes" class="section">
       <h2>Reportes y Estadísticas</h2>
       <label for="mes-select">Mes:</label>
-      <select id="mes-select"></select>
+      <input type="month" id="mes-select" />
       <div id="mes-detalle" style="margin: 1rem 0;"></div>
       <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
       <button id="export-pdf" class="btn-nav">Exportar a PDF</button>
@@ -210,10 +210,44 @@
       const navButtons = document.querySelectorAll('.btn-nav');
       const navSections = document.querySelectorAll('.section');
       function initReportesUI() {
-        // Asegurar snapshot de estadísticas del mes actual
         const now = new Date();
         const currentMonth = now.toISOString().slice(0,7);
         let stats = JSON.parse(localStorage.getItem('monthlyStats') || '{}');
+        if (!stats[currentMonth]) {
+          const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+          const interactions = JSON.parse(localStorage.getItem('interactions') || '[]');
+          stats[currentMonth] = {
+            date: currentMonth,
+            totalContacts: contacts.length,
+            decisions: contacts.filter(c => c.aceptoCristo).length,
+            baptisms: contacts.filter(c => c.bautizado).length,
+            discipleships: contacts.filter(c => c.discipulado).length,
+            totalInteractions: interactions.length
+          };
+          localStorage.setItem('monthlyStats', JSON.stringify(stats));
+        }
+        // Set input value and build options
+        const input = document.getElementById('mes-select');
+        const detalle = document.getElementById('mes-detalle');
+        input.value = currentMonth;
+        input.addEventListener('change', () => {
+          const data = stats[input.value];
+          detalle.innerHTML = `
+            <ul>
+              <li><strong>Mes:</strong> ${data.date}</li>
+              <li><strong>Contactos Totales:</strong> ${data.totalContacts}</li>
+              <li><strong>Decisiones:</strong> ${data.decisions}</li>
+              <li><strong>Bautismos:</strong> ${data.baptisms}</li>
+              <li><strong>Discipulados:</strong> ${data.discipleships}</li>
+              <li><strong>Interacciones:</strong> ${data.totalInteractions}</li>
+            </ul>
+          `;
+        });
+        // Trigger for default
+        input.dispatchEvent(new Event('change'));
+      }
+
+');
         if (!stats[currentMonth]) {
           // Computar snapshot
           const contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
