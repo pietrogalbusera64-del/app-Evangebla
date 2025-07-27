@@ -178,7 +178,9 @@
     </section>
     <section id="reportes" class="section">
       <h2>Reportes y Estadísticas</h2>
-      <label for="mes-select">Mes:</label><select id="mes-select"></select>
+      <label for="mes-select">Mes:</label>
+      <select id="mes-select"></select>
+      <div id="mes-detalle" style="margin: 1rem 0;"></div>
       <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
       <button id="export-pdf" class="btn-nav">Exportar a PDF</button>
     </section>
@@ -207,6 +209,33 @@
     document.addEventListener('DOMContentLoaded', function() {
       const navButtons = document.querySelectorAll('.btn-nav');
       const navSections = document.querySelectorAll('.section');
+      function initReportesUI() {
+        const stats = window.getMonthlyStats();
+        const select = document.getElementById('mes-select');
+        const detalle = document.getElementById('mes-detalle');
+        select.innerHTML = '';
+        Object.keys(stats).sort().reverse().forEach(month => {
+          const opt = document.createElement('option');
+          opt.value = month;
+          opt.textContent = month;
+          select.appendChild(opt);
+        });
+        select.addEventListener('change', () => {
+          const data = stats[select.value];
+          detalle.innerHTML = `
+            <ul>
+              <li><strong>Mes:</strong> ${data.date}</li>
+              <li><strong>Contactos Totales:</strong> ${data.totalContacts}</li>
+              <li><strong>Decisiones:</strong> ${data.decisions}</li>
+              <li><strong>Bautismos:</strong> ${data.baptisms}</li>
+              <li><strong>Discipulados:</strong> ${data.discipleships}</li>
+              <li><strong>Interacciones:</strong> ${data.totalInteractions}</li>
+            </ul>
+          `;
+        });
+        if (select.options.length) select.dispatchEvent(new Event('change'));
+      }
+
       function showSection(id) {
         navSections.forEach(sec => sec.classList.toggle('active', sec.id === id));
         navButtons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-section') === id));
@@ -214,7 +243,7 @@
         switch(id) {
           case 'historial': renderContacts(); break;
           case 'seguimiento': initSeguimiento(); break;
-          case 'reportes':    renderChart(); break;
+          case 'reportes':    initReportesUI(); renderChart(); break;
           case 'grupos':      renderGroups(); break;
           case 'chat':        initChat(); break;
           case 'bautismo':    renderBaptisms(); break;
@@ -222,6 +251,7 @@
           default: break;
         }
       }
+
       navButtons.forEach(btn => btn.addEventListener('click', function() { showSection(this.getAttribute('data-section')); }));
       showSection('splash');
     });
