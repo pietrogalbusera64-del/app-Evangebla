@@ -183,6 +183,15 @@
       <div id="mes-detalle" style="margin: 1rem 0;"></div>
       <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
       <button id="export-pdf" class="btn-nav">Exportar a PDF</button>
+      <!-- Módulo Reportes personalizados -->
+      <button id="add-report" class="btn-nav">Reporte</button>
+      <div id="form-reporte" style="display:none; margin-top:1rem;">
+        <h3>Nuevo Reporte de Comunicación</h3>
+        <select id="reporte-contacto"><option value="">Selecciona Miembro</option></select>
+        <textarea id="reporte-texto" placeholder="Describe la comunicación"></textarea>
+        <button id="save-reporte" class="btn-nav">Guardar Reporte</button>
+      </div>
+      <ul id="lista-reportes" style="margin-top:1rem;"></ul>
     </section>
     <section id="grupos" class="section">
       <h2>Grupos</h2>
