@@ -47,8 +47,14 @@
     }
     /* Main content */
     .content {
-      margin-left: 200px;
+      position: absolute;
+      top: 0;
+      left: 200px;
+      right: 0;
+      bottom: 0;
       padding: 1rem;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .section { display: none; }
     .section.active { display: block; }
@@ -190,3 +196,4 @@
   </script>
 </body>
 </html>
+
