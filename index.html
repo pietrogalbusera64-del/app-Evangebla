@@ -12,7 +12,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <title>EVANG_EBLA</title>
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; }
+    body { margin: 0; font-family: Arial, sans-serif; overflow-x: hidden; }
     .sidebar { position: fixed; top: 0; left: 0; width: 200px; height: 100vh; background: #0052cc; display: flex; flex-direction: column; align-items: center; padding-top: 1rem; box-shadow: 2px 0 5px rgba(0,0,0,0.1); z-index: 1000; }
     .sidebar img { width: 60px; height: 60px; margin-bottom: 1rem; border-radius: 8px; }
     /* Estilos para Formulario de Reporte */
@@ -37,7 +37,11 @@
     th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
     .chart-container { width: 100%; height: 300px; margin-bottom: 1rem; } { width: 100%; height: 300px; margin-bottom: 1rem; }
     @media (max-width: 768px) {
-      .sidebar { position: fixed; top: 0; left: 0; width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 0.5rem 0; }
+      .sidebar { position: fixed; top: 0; left: 0; width: 100%; height: auto; flex-direction: row; overflow-x: hidden; padding: 0.5rem 0; }
+      .sidebar img { display: none; }
+      .btn-nav { flex: 1; text-align: center; padding: 0.5rem; font-size: 0.9rem; }
+      .content { margin-left: 0; padding-top: calc(0.5rem + 2.5rem); }
+    }
       .sidebar img { display: none; }
       .btn-nav { flex: 1; text-align: center; padding: 0.5rem; font-size: 0.9rem; }
       .content { position: relative; margin: 0; padding-top: calc(0.5rem + 2.5rem); }
@@ -58,9 +62,115 @@
     <button data-section="calendario" class="btn-nav">Calendario</button>
   </aside>
   <main class="content">
+    <!-- Splash -->
     <section id="splash" class="section active">
       <img src="/app-Evangebla/splash.png" alt="Splash Evangelismo" class="splash-img" />
       <h2>Bienvenido a EVANG_EBLA</h2>
+    </section>
+
+    <!-- Registro de Contacto -->
+    <section id="registro" class="section">
+      <h2>Registro de Contacto</h2>
+      <form id="form-contacto">
+        <input type="text" name="nombre" placeholder="Nombre" required />
+        <input type="number" name="edad" placeholder="Edad" required />
+        <input type="tel" name="telefono" placeholder="Teléfono" required />
+        <select name="genero" required>
+          <option value="">Género</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+        </select>
+        <input type="text" name="ubicacion" placeholder="Ubicación" />
+        <label><input type="checkbox" name="aceptoCristo" /> Aceptó a Cristo</label>
+        <label><input type="checkbox" name="bautizado" /> Bautizado</label>
+        <label><input type="checkbox" name="discipulado" /> Desea discipulado</label>
+        <button type="submit" class="btn-nav">Guardar</button>
+      </form>
+    </section>
+
+    <!-- Historial de Contactos -->
+    <section id="historial" class="section">
+      <h2>Historial de Contactos</h2>
+      <select id="filtro-estado">
+        <option value="all">Todos</option>
+        <option value="aceptoCristo">Aceptó a Cristo</option>
+        <option value="bautizado">Bautizado</option>
+        <option value="discipulado">Discipulado</option>
+      </select>
+      <table>
+        <thead>
+          <tr><th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Género</th><th>Ubicación</th><th>Acciones</th></tr>
+        </thead>
+        <tbody id="lista-contactos"></tbody>
+      </table>
+      <button id="export-contactos" class="btn-nav">Exportar a Excel</button>
+    </section>
+
+    <!-- Seguimiento -->
+    <section id="seguimiento" class="section">
+      <h2>Seguimiento</h2>
+      <form id="form-seguimiento">
+        <select id="contacto-seg" required><option value="">Selecciona contacto</option></select>
+        <input type="date" id="fecha-seg" required />
+        <select id="tipo-seg" required><option>Visita</option><option>Llamada</option><option>Mensaje</option></select>
+        <fieldset><legend>Temas de discipulado</legend>
+          <label><input type="checkbox" class="check-tema" value="Oración" /> Oración</label>
+          <label><input type="checkbox" class="check-tema" value="Biblia" /> Biblia</label>
+          <label><input type="checkbox" class="check-tema" value="Fe" /> Fe</label>
+        </fieldset>
+        <button type="submit" class="btn-nav">Registrar</button>
+      </form>
+      <ul id="lista-seguimiento"></ul>
+      <button id="export-interacciones" class="btn-nav">Exportar a Excel</button>
+    </section>
+
+    <!-- Grupos y Discipulados -->
+    <section id="grupos" class="section">
+      <h2>Grupos y Discipulados</h2>
+      <form id="form-grupo">
+        <input type="text" id="nombre-grupo" placeholder="Nombre de grupo" required />
+        <select id="miembros-grupo" multiple></select>
+        <button type="submit" class="btn-nav">Crear Grupo</button>
+      </form>
+      <ul id="lista-grupos"></ul>
+      <button id="export-grupos" class="btn-nav">Exportar a Excel</button>
+    </section>
+
+    <!-- Chat y Oración -->
+    <section id="chat" class="section">
+      <h2>Chat y Oración</h2>
+      <form id="form-chat">
+        <input type="text" id="usuario-chat" placeholder="Tu nombre" required />
+        <textarea id="mensaje-chat" placeholder="Mensaje o petición" required></textarea>
+        <label><input type="checkbox" id="privado-chat" /> Privado</label>
+        <button type="submit" class="btn-nav">Enviar Mensaje</button>
+      </form>
+      <ul id="lista-chat"></ul>
+    </section>
+
+    <!-- Calendario de Bautismo -->
+    <section id="bautismo" class="section">
+      <h2>Calendario de Bautismo</h2>
+      <form id="form-bautismo">
+        <input type="text" id="bautizo-nombre" placeholder="Nombre de la persona" required />
+        <input type="date" id="bautizo-fecha" required />
+        <button type="submit" class="btn-nav">Agregar Bautismo</button>
+      </form>
+      <ul id="lista-bautismos"></ul>
+    </section>
+
+    <!-- Calendario de Evangelismo -->
+    <section id="calendario" class="section">
+      <h2>Calendario de Evangelismo</h2>
+      <form id="form-evento">
+        <input type="text" id="nombre-evento" placeholder="Nombre del evento" required />
+        <select id="tipo-evento" required><option>Templo</option><option>Callejero</option></select>
+        <input type="date" id="fecha-evento" required />
+        <textarea id="detalles-evento" placeholder="Detalles"></textarea>
+        <button type="submit" class="btn-nav">Programar Evento</button>
+      </form>
+      <ul id="lista-eventos"></ul>
+      <button id="export-eventos" class="btn-nav">Exportar a Excel</button>
     </section>
     <!-- ...otras secciones... -->
     <section id="reportes" class="section">
@@ -99,7 +209,7 @@
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const navButtons = document.querySelectorAll('.btn-nav');
+      const navButtons = document.querySelectorAll('.sidebar .btn-nav');
       const navSections = document.querySelectorAll('.section');
       function showSection(id) {
         navSections.forEach(sec => sec.classList.toggle('active', sec.id === id));
@@ -167,4 +277,3 @@
   </script>
 </body>
 </html>
-
