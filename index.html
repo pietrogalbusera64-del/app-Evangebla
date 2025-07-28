@@ -6,9 +6,8 @@
   <meta name="theme-color" content="#0052CC">
   <link rel="manifest" href="/app-Evangebla/manifest.json">
   <link rel="apple-touch-icon" href="/app-Evangebla/icon.png">
-  <!-- Font Awesome Free -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css" integrity="sha512-PLACEHOLDER" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css" integrity="sha512-PLACEHOLDER" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Chart.js y librerías -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
@@ -24,7 +23,7 @@
                text-align: left; padding: 0.75rem 1rem; cursor: pointer;
                font-size: 0.95rem; transition: background 0.2s;
                display: flex; align-items: center; }
-    .btn-nav i { font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 1.2em; margin-right: 8px; }
+    .btn-nav .material-icons { font-size: 1.2em; margin-right: 8px; }
     .btn-nav:hover, .btn-nav.active { background: #003d99; }
     .content { margin-left: 200px; padding: 1rem; }
     .section { display: none; }
@@ -45,28 +44,28 @@
   <aside class="sidebar">
     <img src="/app-Evangebla/icon.png" alt="Icono EVANG_EBLA" />
     <button data-section="splash" class="btn-nav active">
-      <i class="fa-solid fa-house"></i><span>Inicio</span>
+      <span class="material-icons">home</span><span>Inicio</span>
     </button>
     <button data-section="registro" class="btn-nav">
-      <i class="fa-solid fa-user-plus"></i><span>Registro</span>
+      <span class="material-icons">person_add</span><span>Registro</span>
     </button>
     <button data-section="historial" class="btn-nav">
-      <i class="fa-solid fa-list"></i><span>Historial</span>
+      <span class="material-icons">history</span><span>Historial</span>
     </button>
     <button data-section="seguimiento" class="btn-nav">
-      <i class="fa-solid fa-chart-line"></i><span>Seguimiento</span>
+      <span class="material-icons">track_changes</span><span>Seguimiento</span>
     </button>
     <button data-section="reportes" class="btn-nav">
-      <i class="fa-solid fa-file-lines"></i><span>Reportes</span>
+      <span class="material-icons">description</span><span>Reportes</span>
     </button>
     <button data-section="grupos" class="btn-nav">
-      <i class="fa-solid fa-users"></i><span>Grupos</span>
+      <span class="material-icons">group</span><span>Grupos</span>
     </button>
     <button data-section="bautismo" class="btn-nav">
-      <i class="fa-solid fa-water"></i><span>Bautismo</span>
+      <span class="material-icons">water_drop</span><span>Bautismo</span>
     </button>
     <button data-section="calendario" class="btn-nav">
-      <i class="fa-solid fa-calendar-days"></i><span>Calendario</span>
+      <span class="material-icons">calendar_month</span><span>Calendario</span>
     </button>
   </aside>
 
@@ -86,7 +85,7 @@
         btn.addEventListener('click', () => {
           buttons.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          const secId = btn.getAttribute('data-section');
+          const secId = btn.dataset.section;
           sections.forEach(sec => sec.classList.toggle('active', sec.id === secId));
         });
       });
