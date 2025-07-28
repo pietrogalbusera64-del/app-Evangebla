@@ -85,7 +85,7 @@
     <button data-section="seguimiento" class="btn-nav">Seguimiento</button>
     <button data-section="reportes" class="btn-nav">Reportes</button>
     <button data-section="grupos" class="btn-nav">Grupos</button>
-    <button data-section="chat" class="btn-nav">Chat/Oración</button>
+    
     <button data-section="bautismo" class="btn-nav">Bautismo</button>
     <button data-section="calendario" class="btn-nav">Calendario</button>
   </aside>
@@ -165,16 +165,7 @@
     </section>
 
     <!-- Chat y Oración -->
-    <section id="chat" class="section">
-      <h2>Chat y Oración</h2>
-      <form id="form-chat">
-        <input type="text" id="usuario-chat" placeholder="Tu nombre" required />
-        <textarea id="mensaje-chat" placeholder="Mensaje o petición" required></textarea>
-        <label><input type="checkbox" id="privado-chat" /> Privado</label>
-        <button type="submit" class="btn-nav">Enviar Mensaje</button>
-      </form>
-      <ul id="lista-chat"></ul>
-    </section>
+    
 
     <!-- Calendario de Bautismo -->
     <section id="bautismo" class="section">
@@ -247,7 +238,7 @@
           case 'seguimiento': initSeguimiento(); break;
           case 'reportes': initReportesUI(); renderChart(); initReportModule(); break;
           case 'grupos': renderGroups(); break;
-          case 'chat': initChat(); break;
+          
           case 'bautismo': renderBaptisms(); break;
           case 'calendario': initEventos(); break;
           default: break;
