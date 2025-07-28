@@ -6,106 +6,38 @@
   <meta name="theme-color" content="#0052CC">
   <link rel="manifest" href="/app-Evangebla/manifest.json">
   <link rel="apple-touch-icon" href="/app-Evangebla/icon.png">
-  <!-- Font Awesome -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-pVUDoZjxpWfnfR9PUEsX1E+L2aI4/mCg1UFcN3Hkr4YmqR8Bx7hL+2bRrqs+LaeLwh7f+UYqE9h6SXQgcw5CcA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Font Awesome Free -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css" integrity="sha512-PLACEHOLDER" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css" integrity="sha512-PLACEHOLDER" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Chart.js y librerías -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <title>EVANG_EBLA</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200px;
-      height: 100vh;
-      background: #0052cc;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 1rem;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      z-index: 1000;
-    }
-    .sidebar img {
-      width: 60px;
-      height: 60px;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-    }
-    .btn-nav {
-      width: 100%;
-      background: #0052cc;
-      color: #fff;
-      border: none;
-      text-align: left;
-      padding: 0.75rem 1rem;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-    }
-    .btn-nav i {
-      font-size: 1.1em;
-      margin-right: 8px;
-    }
-    .btn-nav:hover,
-    .btn-nav.active {
-      background: #003d99;
-    }
-    .content {
-      margin-left: 200px;
-      padding: 1rem;
-    }
-    .section {
-      display: none;
-    }
-    .section.active {
-      display: block;
-    }
-    .splash-img {
-      width: 100%;
-      max-width: 400px;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
+    body { margin: 0; font-family: Arial, sans-serif; }
+    .sidebar { position: fixed; top: 0; left: 0; width: 200px; height: 100vh; background: #0052cc;
+               display: flex; flex-direction: column; align-items: center; padding-top: 1rem;
+               box-shadow: 2px 0 5px rgba(0,0,0,0.1); z-index: 1000; }
+    .sidebar img { width: 60px; height: 60px; margin-bottom: 1rem; border-radius: 8px; }
+    .btn-nav { width: 100%; background: #0052cc; color: #fff; border: none;
+               text-align: left; padding: 0.75rem 1rem; cursor: pointer;
+               font-size: 0.95rem; transition: background 0.2s;
+               display: flex; align-items: center; }
+    .btn-nav i { font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 1.2em; margin-right: 8px; }
+    .btn-nav:hover, .btn-nav.active { background: #003d99; }
+    .content { margin-left: 200px; padding: 1rem; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .splash-img { width: 100%; max-width: 400px; border-radius: 8px;
+                  margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
     @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 0.5rem 0;
-        white-space: nowrap;
-      }
-      .sidebar img {
-        display: none;
-      }
-      .btn-nav {
-        flex: none;
-        display: inline-flex;
-        justify-content: center;
-        text-align: center;
-        padding: 0.5rem;
-        font-size: 0.9rem;
-      }
-      .content {
-        margin-left: 0;
-        padding-top: calc(0.5rem + 2.5rem);
-      }
+      .sidebar { width: 100%; height: auto; flex-direction: row;
+                 overflow-x: auto; padding: 0.5rem 0; white-space: nowrap; }
+      .sidebar img { display: none; }
+      .btn-nav { flex: none; display: inline-flex;
+                 justify-content: center; padding: 0.5rem; font-size: 0.9rem; }
+      .content { margin-left: 0; padding-top: calc(0.5rem + 2.5rem); }
     }
   </style>
 </head>
@@ -113,33 +45,52 @@
   <aside class="sidebar">
     <img src="/app-Evangebla/icon.png" alt="Icono EVANG_EBLA" />
     <button data-section="splash" class="btn-nav active">
-      <i class="fa-solid fa-home"></i> Inicio
+      <i class="fa-solid fa-house"></i><span>Inicio</span>
     </button>
     <button data-section="registro" class="btn-nav">
-      <i class="fa-solid fa-user-plus"></i> Registro
+      <i class="fa-solid fa-user-plus"></i><span>Registro</span>
     </button>
     <button data-section="historial" class="btn-nav">
-      <i class="fa-solid fa-list"></i> Historial
+      <i class="fa-solid fa-list"></i><span>Historial</span>
     </button>
     <button data-section="seguimiento" class="btn-nav">
-      <i class="fa-solid fa-chart-line"></i> Seguimiento
+      <i class="fa-solid fa-chart-line"></i><span>Seguimiento</span>
     </button>
     <button data-section="reportes" class="btn-nav">
-      <i class="fa-solid fa-file-alt"></i> Reportes
+      <i class="fa-solid fa-file-lines"></i><span>Reportes</span>
     </button>
     <button data-section="grupos" class="btn-nav">
-      <i class="fa-solid fa-users"></i> Grupos
+      <i class="fa-solid fa-users"></i><span>Grupos</span>
     </button>
     <button data-section="bautismo" class="btn-nav">
-      <i class="fa-solid fa-tint"></i> Bautismo
+      <i class="fa-solid fa-water"></i><span>Bautismo</span>
     </button>
     <button data-section="calendario" class="btn-nav">
-      <i class="fa-solid fa-calendar"></i> Calendario
+      <i class="fa-solid fa-calendar-days"></i><span>Calendario</span>
     </button>
   </aside>
+
   <main class="content">
-    <!-- Contenido de secciones igual al anterior con <i class="fa-solid ..."></i> en botones -->
+    <section id="splash" class="section active">
+      <img src="/app-Evangebla/splash.png" alt="Splash Evangelismo" class="splash-img" />
+      <h2>Bienvenido a EVANG_EBLA</h2>
+    </section>
+    <!-- Otras secciones aquí... -->
   </main>
-  <!-- Scripts iguales que antes -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const buttons = document.querySelectorAll('.btn-nav');
+      const sections = document.querySelectorAll('.section');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const secId = btn.getAttribute('data-section');
+          sections.forEach(sec => sec.classList.toggle('active', sec.id === secId));
+        });
+      });
+    });
+  </script>
 </body>
 </html>
