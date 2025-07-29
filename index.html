@@ -143,13 +143,15 @@
   document.addEventListener('DOMContentLoaded', () => {
     const contactos = [];
     // Navegación
+        // Navegación entre secciones (no abrir formulario de reporte)
     document.querySelectorAll('.btn-nav').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.btn-nav').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const sec = btn.dataset-section || btn.getAttribute('data-section');
+        const sec = btn.getAttribute('data-section');
         document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === sec));
       });
+    });
     });
     // Registro
     document.getElementById('form-contacto').addEventListener('submit', e => {
