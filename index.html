@@ -16,21 +16,9 @@
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; font-family: Arial, sans-serif; }
-    .sidebar {
-      position: fixed; top: 0; left: 0;
-      width: 200px; height: 100vh;
-      background: #0052cc;
-      display: flex; flex-direction: column; align-items: center;
-      padding-top: 1rem; box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      z-index: 1000;
-    }
+    .sidebar { position: fixed; top: 0; left: 0; width: 200px; height: 100vh; background: #0052cc; display: flex; flex-direction: column; align-items: center; padding-top: 1rem; box-shadow: 2px 0 5px rgba(0,0,0,0.1); z-index: 1000; }
     .sidebar img { width: 60px; height: 60px; margin-bottom: 1rem; border-radius: 8px; }
-    .btn-nav {
-      width: 100%; background: #0052cc; color: #fff; border: none;
-      text-align: left; padding: 0.75rem 1rem; cursor: pointer;
-      font-size: 0.95rem; display: flex; align-items: center;
-      transition: background 0.2s;
-    }
+    .btn-nav { width: 100%; background: #0052cc; color: #fff; border: none; text-align: left; padding: 0.75rem 1rem; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; transition: background 0.2s; }
     .btn-nav .material-icons { font-size: 1.2em; margin-right: 8px; }
     .btn-nav:hover, .btn-nav.active { background: #003d99; }
     .content { margin-left: 200px; padding: 1rem; }
@@ -51,14 +39,14 @@
 <body>
   <aside class="sidebar">
     <img src="/app-Evangebla/icon.png" alt="Icono EVANG_EBLA" />
-    <button data-section="splash" class="btn-nav active"><span class="material-icons">home</span>Inicio</button>
-    <button data-section="registro" class="btn-nav"><span class="material-icons">person_add</span>Registro</button>
-    <button data-section="historial" class="btn-nav"><span class="material-icons">history</span>Historial</button>
-    <button data-section="seguimiento" class="btn-nav"><span class="material-icons">track_changes</span>Seguimiento</button>
-    <button data-section="reportes" class="btn-nav"><span class="material-icons">description</span>Reportes</button>
-    <button data-section="grupos" class="btn-nav"><span class="material-icons">group</span>Grupos</button>
-    <button data-section="bautismo" class="btn-nav"><span class="material-icons">water_drop</span>Bautismo</button>
-    <button data-section="calendario" class="btn-nav"><span class="material-icons">calendar_month</span>Calendario</button>
+    <button data-section="splash" class="btn-nav active" type="button"><span class="material-icons">home</span>Inicio</button>
+    <button data-section="registro" class="btn-nav" type="button"><span class="material-icons">person_add</span>Registro</button>
+    <button data-section="historial" class="btn-nav" type="button"><span class="material-icons">history</span>Historial</button>
+    <button data-section="seguimiento" class="btn-nav" type="button"><span class="material-icons">track_changes</span>Seguimiento</button>
+    <button data-section="reportes" class="btn-nav" type="button"><span class="material-icons">description</span>Reportes</button>
+    <button data-section="grupos" class="btn-nav" type="button"><span class="material-icons">group</span>Grupos</button>
+    <button data-section="bautismo" class="btn-nav" type="button"><span class="material-icons">water_drop</span>Bautismo</button>
+    <button data-section="calendario" class="btn-nav" type="button"><span class="material-icons">calendar_month</span>Calendario</button>
   </aside>
 
   <main class="content">
@@ -78,15 +66,18 @@
         <label><input type="checkbox" name="aceptoCristo" /> Aceptó a Cristo</label>
         <label><input type="checkbox" name="bautizado" /> Bautizado</label>
         <label><input type="checkbox" name="discipulado" /> Desea discipulado</label>
-        <button type="submit" class="btn-nav"><span class="material-icons">save</span>Guardar</button>
+        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Guardar</button>
       </form>
     </section>
 
     <section id="historial" class="section">
       <h2>Historial de Contactos</h2>
       <select id="filtro-estado"><option value="all">Todos</option><option value="aceptoCristo">Aceptó a Cristo</option><option value="bautizado">Bautizado</option><option value="discipulado">Discipulado</option></select>
-      <table><thead><tr><th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Género</th><th>Ubicación</th><th>Acciones</th></tr></thead><tbody id="lista-contactos"></tbody></table>
-      <button id="export-contactos" class="btn-nav"><span class="material-icons">file_download</span>Exportar a Excel</button>
+      <table>
+        <thead><tr><th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Género</th><th>Ubicación</th><th>Acciones</th></tr></thead>
+        <tbody id="lista-contactos"></tbody>
+      </table>
+      <button id="export-contactos" class="btn-nav" type="button"><span class="material-icons">file_download</span>Exportar a Excel</button>
     </section>
 
     <section id="seguimiento" class="section">
@@ -100,10 +91,10 @@
           <label><input type="checkbox" class="check-tema" value="Biblia" /> Biblia</label>
           <label><input type="checkbox" class="check-tema" value="Fe" /> Fe</label>
         </fieldset>
-        <button type="submit" class="btn-nav"><span class="material-icons">save</span>Registrar</button>
+        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Registrar</button>
       </form>
       <ul id="lista-seguimiento"></ul>
-      <button id="export-interacciones" class="btn-nav"><span class="material-icons">file_download</span>Exportar a Excel</button>
+      <button id="export-interacciones" class="btn-nav" type="button"><span class="material-icons">file_download</span>Exportar a Excel</button>
     </section>
 
     <section id="grupos" class="section">
@@ -111,10 +102,10 @@
       <form id="form-grupo">
         <input type="text" id="nombre-grupo" placeholder="Nombre de grupo" required />
         <select id="miembros-grupo" multiple></select>
-        <button type="submit" class="btn-nav"><span class="material-icons">save</span>Crear Grupo</button>
+        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Crear Grupo</button>
       </form>
       <ul id="lista-grupos"></ul>
-      <button id="export-grupos" class="btn-nav"><span class="material-icons">file_download</span>Exportar a Excel</button>
+      <button id="export-grupos" class="btn-nav" type="button"><span class="material-icons">file_download</span>Exportar a Excel</button>
     </section>
 
     <section id="bautismo" class="section">
@@ -122,7 +113,7 @@
       <form id="form-bautismo">
         <input type="text" id="bautizo-nombre" placeholder="Nombre de la persona" required />
         <input type="date" id="bautizo-fecha" required />
-        <button type="submit" class="btn-nav"><span class="material-icons">save</span>Agregar Bautismo</button>
+        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Agregar Bautismo</button>
       </form>
       <ul id="lista-bautismos"></ul>
     </section>
@@ -134,40 +125,65 @@
         <select id="tipo-evento" required><option>Templo</option><option>Callejero</option></select>
         <input type="date" id="fecha-evento" required />
         <textarea id="detalles-evento" placeholder="Detalles"></textarea>
-        <button type="submit" class="btn-nav"><span class="material-icons">save</span>Programar Evento</button>
+        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Programar Evento</button>
       </form>
       <ul id="lista-eventos"></ul>
-      <button id="export-eventos" class="btn-nav"><span class="material-icons">file_download</span>Exportar a Excel</button>
+      <button id="export-eventos" class="btn-nav" type="button"><span class="material-icons">file_download</span>Exportar a Excel</button>
     </section>
 
     <section id="reportes" class="section">
       <h2>Reportes y Estadísticas</h2>
       <label for="mes-select">Mes:</label><input type="month" id="mes-select" />
       <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
-      <button id="export-pdf" class="btn-nav"><span class="material-icons">picture_as_pdf</span>Exportar a PDF</button>
-      <button id="add-report" class="btn-nav" onclick="toggleReportForm()"><span class="material-icons">add_circle</span>Reporte</button>
+      <button id="export-pdf" class="btn-nav" type="button"><span class="material-icons">picture_as_pdf</span>Exportar a PDF</button>
+      <button id="add-report" class="btn-nav" type="button"><span class="material-icons">add_circle</span>Reporte</button>
       <div id="form-reporte" style="display:none; margin-top:1rem;">
         <select id="reporte-contacto"><option value="">Selecciona Miembro</option></select>
         <textarea id="reporte-texto" placeholder="Describe la comunicación"></textarea>
-        <button id="save-reporte" class="btn-nav"><span class="material-icons">save</span>Guardar Reporte</button>
+        <button id="save-reporte" class="btn-nav" type="button"><span class="material-icons">save</span>Guardar Reporte</button>
       </div>
       <ul id="lista-reportes"></ul>
     </section>
   </main>
 
   <script src="/app-Evangebla/app.js"></script>
-  <script>if('serviceWorker'in navigator)navigator.serviceWorker.register('/app-Evangebla/service-worker.js');</script>
   <script>
-    function toggleReportForm(){ const f=document.getElementById('form-reporte'); f.style.display=f.style.display==='block'?'none':'block'; }
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded',()=>{
-      document.querySelectorAll('.btn-nav').forEach(btn=>btn.addEventListener('click',()=>{
-        document.querySelectorAll('.btn-nav').forEach(b=>b.classList.remove('active'));
+    // Navegación entre secciones
+    document.querySelectorAll('.btn-nav[data-section]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.btn-nav').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const target=btn.dataset.section;
-        document.querySelectorAll('.section').forEach(sec=>sec.classList.toggle('active',sec.id===target));
-      }));
+        const sec = btn.getAttribute('data-section');
+        document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === sec));
+        if (sec === 'reportes') toggleReportForm();
+      });
+    });
+
+    // Report Form toggle y carga de contactos
+    window.contactos = window.contactos || [];
+    function toggleReportForm() {
+      const form = document.getElementById('form-reporte');
+      if (!form) return;
+      form.style.display = form.style.display === 'block' ? 'none' : 'block';
+      if (form.style.display === 'block') {
+        const select = document.getElementById('reporte-contacto');
+        select.innerHTML = '<option value="">Selecciona Miembro</option>';
+        window.contactos.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = c.nombre;
+          select.appendChild(opt);
+        });
+      }
+    }
+
+    document.getElementById('add-report')?.addEventListener('click', toggleReportForm);
+    document.getElementById('save-reporte')?.addEventListener('click', () => {
+      const form = document.getElementById('form-reporte');
+      const id = document.getElementById('reporte-contacto').value;
+      const txt = document.getElementById('reporte-texto').value.trim();
+      if (!id || !txt) return alert('Selecciona un miembro y escribe la comunicación.');
+      form.style.display = 'none';
     });
   </script>
 </body>
