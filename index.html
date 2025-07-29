@@ -25,12 +25,17 @@
     form input, form select, form textarea, form button {
       width: 100%; padding: 0.5rem; margin-bottom: 0.75rem; border: 1px solid #ccc; border-radius: 4px;
     }
-    /* Labels for checkboxes in forms should not expand full width */
+    /* General checkbox labels inline */
     form label {
       display: inline-flex; align-items: center; width: auto; margin-bottom: 0.5rem; cursor: pointer;
     }
     form label input[type="checkbox"] {
       margin-right: 0.5rem;
+    }
+    /* Specific override for Registro section checkbox labels to prevent overlap */
+    #registro form label {
+      width: auto !important;
+      margin-right: 1rem;
     }
     table { width:100%; border-collapse:collapse; margin-bottom:1rem; }
     th, td { border:1px solid #ccc; padding:0.5rem; }
