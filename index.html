@@ -8,31 +8,28 @@
   <link rel="apple-touch-icon" href="/app-Evangebla/icon.png">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <title>EVANG_EBLA</title>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; font-family: Arial, sans-serif; }
-    .sidebar { position: fixed; top:0; left:0; width:200px; height:100vh; background:#0052cc; display:flex; flex-direction:column; align-items:center; padding-top:1rem; z-index:1000; }
-    .sidebar img { width:60px; margin-bottom:1rem; border-radius:8px; }
-    .btn-nav { width:100%; background:none; color:#fff; border:none; text-align:left; padding:0.75rem 1rem; cursor:pointer; display:flex; align-items:center; transition:background 0.2s; }
-    .btn-nav:hover, .btn-nav.active { background:#003d99; }
-    .content { margin-left:200px; padding:1rem; }
-    .section { display:none; }
-    .section.active { display:block; }
-    table { width:100%; border-collapse:collapse; margin-bottom:1rem; }
-    th, td { border:1px solid #ccc; padding:0.5rem; }
+    .sidebar { position: fixed; top: 0; left: 0; width: 200px; height: 100vh; background: #0052cc; display: flex; flex-direction: column; align-items: center; padding-top: 1rem; z-index: 1000; }
+    .sidebar img { width: 60px; margin-bottom: 1rem; border-radius: 8px; }
+    .btn-nav { width: 100%; background: none; color: #fff; border: none; text-align: left; padding: 0.75rem 1rem; cursor: pointer; display: flex; align-items: center; transition: background 0.2s; }
+    .btn-nav:hover, .btn-nav.active { background: #003d99; }
+    .content { margin-left: 200px; padding: 1rem; }
+    .section { display: none; }
+    .section.active { display: block; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; }
     form input, form select, form textarea, form button {
       width:100%; padding:0.5rem; margin-bottom:0.75rem; border:1px solid #ccc; border-radius:4px;
     }
-    form label {
-      display:block; margin-bottom:0.25rem; width:auto; border:none; padding:0;
+    form > label {
+      display:block; margin-bottom:0.5rem; font-weight:bold;
     }
-    #miembros-checkboxes {
-      border:1px solid #ccc; border-radius:4px; padding:0.5rem; max-height:150px; overflow:auto; margin-bottom:1rem;
-    }
-    @media (max-width:768px) { .sidebar { width:100%; height:auto; flex-direction:row; overflow-x:auto; } .content { margin-left:0; padding-top:4rem; } }
+    #miembros-checkboxes { border: 1px solid #ccc; border-radius: 4px; padding: 0.5rem; max-height: 150px; overflow: auto; margin-bottom: 1rem; }
+    .chart-container { width: 100%; height: 300px; }
+    @media (max-width: 768px) { .sidebar { width: 100%; flex-direction: row; overflow-x: auto; } .content { margin-left: 0; padding-top: 4rem; } }
   </style>
 </head>
 <body>
@@ -48,18 +45,22 @@
     <button data-section="calendario" class="btn-nav"><span class="material-icons">calendar_month</span>Calendario</button>
     <button data-section="estadistica" class="btn-nav"><span class="material-icons">bar_chart</span>Estadística</button>
   </aside>
+
   <main class="content">
     <section id="splash" class="section active">
       <img src="/app-Evangebla/splash.png" alt="Splash" style="width:100%;max-width:400px;margin-bottom:1rem;" />
       <h2>Bienvenido a EVANG_EBLA</h2>
     </section>
+
     <section id="registro" class="section">
       <h2>Registro de Contacto</h2>
       <form id="form-contacto">
         <input id="nombre" name="nombre" placeholder="Nombre" required />
         <input id="edad" type="number" name="edad" placeholder="Edad" required />
         <input id="telefono" name="telefono" placeholder="Teléfono" required />
-        <select id="genero" name="genero" required><option value="">Género</option><option>Masculino</option><option>Femenino</option></select>
+        <select id="genero" name="genero" required>
+          <option value="">Género</option><option>Masculino</option><option>Femenino</option>
+        </select>
         <input id="ubicacion" name="ubicacion" placeholder="Ubicación" />
         <label><input type="checkbox" id="aceptoCristo" name="aceptoCristo" />Aceptó a Cristo</label>
         <label><input type="checkbox" id="bautizado" name="bautizado" />Bautizado</label>
@@ -67,6 +68,7 @@
         <button type="submit">Guardar</button>
       </form>
     </section>
+
     <section id="historial" class="section">
       <h2>Historial de Contactos</h2>
       <table>
@@ -74,6 +76,7 @@
         <tbody id="lista-contactos"></tbody>
       </table>
     </section>
+
     <section id="seguimiento" class="section">
       <h2>Seguimiento</h2>
       <form id="form-seguimiento">
@@ -84,17 +87,22 @@
       </form>
       <ul id="lista-seguimiento"></ul>
     </section>
+
     <section id="grupos" class="section">
       <h2>Grupos y Discipulados</h2>
       <form id="form-grupo">
         <input type="hidden" id="grupo-id" />
-        <label>Nombre del Grupo:</label><input id="nombre-grupo" placeholder="Nombre del Grupo" required />
-        <label>Selecciona Miembros:</label><div id="miembros-checkboxes"></div>
-        <label>Miembros en el Grupo:</label><textarea id="miembros-seleccionados" rows="3" readonly></textarea>
+        <label>Nombre del Grupo:</label>
+        <input id="nombre-grupo" placeholder="Nombre del Grupo" required />
+        <label>Selecciona Miembros:</label>
+        <div id="miembros-checkboxes"></div>
+        <label>Miembros en el Grupo:</label>
+        <textarea id="miembros-seleccionados" rows="3" readonly></textarea>
         <button type="submit">Guardar Grupo</button>
       </form>
       <ul id="lista-grupos"></ul>
     </section>
+
     <section id="bautismo" class="section">
       <h2>Calendario de Bautismo</h2>
       <form id="form-bautismo">
@@ -104,6 +112,7 @@
       </form>
       <ul id="lista-bautismos"></ul>
     </section>
+
     <section id="reportes" class="section">
       <h2>Reportes</h2>
       <button id="add-report">Agregar Reporte</button>
@@ -114,6 +123,7 @@
       </div>
       <ul id="lista-reportes"></ul>
     </section>
+
     <section id="calendario" class="section">
       <h2>Calendario de Evangelismo</h2>
       <form id="form-evento">
@@ -123,27 +133,70 @@
       </form>
       <ul id="lista-eventos"></ul>
     </section>
+
     <section id="estadistica" class="section">
       <h2>Estadística de Datos</h2>
-      <label for="mes-estadistica">Mes:</label><input type="month" id="mes-estadistica" />
-      <div class="chart-container" style="height:300px;"><canvas id="chart-estadistica"></canvas></div>
+      <label for="mes-estadistica">Mes:</label>
+      <input type="month" id="mes-estadistica" />
+      <div class="chart-container">
+        <canvas id="chart-estadistica"></canvas>
+      </div>
     </section>
   </main>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       window.contactos = window.contactos || [];
       const contactos = window.contactos;
       const grupos = [];
-      // Navegación
-      document.querySelectorAll('aside .btn-nav').forEach(btn => btn.addEventListener('click', () => {
-        document.querySelectorAll('aside .btn-nav').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        const secId = btn.dataset.section;
-        document.querySelectorAll('main .section').forEach(sec=>sec.classList.toggle('active',sec.id===secId));
-        if(secId==='registro') document.getElementById('form-contacto').addEventListener('submit', e=>{
-        e.preventDefault(); const f=e.target;
-        const acepto = document.getElementById('aceptoCristo').checked;
-        const baut = document.getElementById('bautizado').checked;
+
+      // Navegación entre secciones
+      document.querySelectorAll('aside .btn-nav').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('aside .btn-nav').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const secId = btn.getAttribute('data-section');
+          document.querySelectorAll('main .section').forEach(sec => sec.classList.toggle('active', sec.id === secId));
+
+          // Al entrar en secciones específicas
+          if (secId === 'registro') document.getElementById('form-contacto').reset();
+          if (secId === 'historial');
+          if (secId === 'seguimiento') populateSelect('contacto-seg');
+          if (secId === 'grupos') { populateGroupCheckboxes(); updateSelectedMembers(); }
+          if (secId === 'bautismo') populateSelect('bautizo-contacto');
+          if (secId === 'reportes') populateSelect('reporte-contacto');
+          if (secId === 'estadistica') renderChart();
+        });
+      });
+
+      // Población de selects
+      function populateSelect(id) {
+        const sel = document.getElementById(id);
+        sel.innerHTML = '<option value="">Selecciona contacto</option>';
+        contactos.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`);
+      }
+
+      // Checkboxes en grupos
+      function populateGroupCheckboxes() {
+        const container = document.getElementById('miembros-checkboxes');
+        container.innerHTML = '';
+        contactos.forEach(c => {
+          const label = document.createElement('label');
+          label.innerHTML = `<input type="checkbox" value="${c.id}" /> ${c.nombre}`;
+          container.appendChild(label);
+        });
+      }
+
+      function updateSelectedMembers() {
+        const checked = Array.from(document.querySelectorAll('#miembros-checkboxes input:checked'));
+        document.getElementById('miembros-seleccionados').value = checked.map(i => i.parentNode.textContent.trim()).join(', ');
+      }
+      document.getElementById('miembros-checkboxes').addEventListener('change', updateSelectedMembers);
+
+      // Registro de contactos
+      document.getElementById('form-contacto').addEventListener('submit', e => {
+        e.preventDefault();
+        const f = e.target;
         contactos.push({
           id: Date.now(),
           nombre: f.nombre.value,
@@ -151,61 +204,96 @@
           telefono: f.telefono.value,
           genero: f.genero.value,
           ubicacion: f.ubicacion.value,
-          aceptoCristo: acepto,
-          bautizado: baut
+          aceptoCristo: document.getElementById('aceptoCristo').checked,
+          bautizado: document.getElementById('bautizado').checked
         });
-        document.getElementById('lista-contactos').innerHTML+=
+        document.getElementById('lista-contactos').innerHTML +=
           `<tr><td>${f.nombre.value}</td><td>${f.edad.value}</td><td>${f.telefono.value}</td><td>${f.genero.value}</td><td>${f.ubicacion.value}</td></tr>`;
         f.reset();
       });
-      }
-      function updateSelectedMembers() {
-        const checked = Array.from(document.querySelectorAll('#miembros-checkboxes input:checked'));
-        const names = checked.map(i=>i.parentNode.textContent.trim());
-        document.getElementById('miembros-seleccionados').value = names.join(', ');
-      }
-      document.getElementById('miembros-checkboxes').addEventListener('change', updateSelectedMembers);
-      // Registro
-      document.getElementById('form-contacto').addEventListener('submit', e=>{
-        e.preventDefault(); const f=e.target;
-        contactos.push({id:Date.now(), nombre:f.nombre.value, edad:f.edad.value, telefono:f.telefono.value, genero:f.genero.value, ubicacion:f.ubicacion.value});
-        document.getElementById('lista-contactos').innerHTML+=`<tr><td>${f.nombre.value}</td><td>${f.edad.value}</td><td>${f.telefono.value}</td><td>${f.genero.value}</td><td>${f.ubicacion.value}</td></tr>`;
-        f.reset();
-      });
+
       // Seguimiento
-      document.getElementById('form-seguimiento').addEventListener('submit', e=>{
-        e.preventDefault(); const sel=document.getElementById('contacto-seg');
-        document.getElementById('lista-seguimiento').innerHTML+=`<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('fecha-seg').value}</li>`;
+      document.getElementById('form-seguimiento').addEventListener('submit', e => {
+        e.preventDefault();
+        const sel = document.getElementById('contacto-seg');
+        document.getElementById('lista-seguimiento').innerHTML +=
+          `<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('fecha-seg').value}</li>`;
         e.target.reset();
       });
+
       // Grupos
-      document.getElementById('form-grupo').addEventListener('submit', e=>{
-        e.preventDefault(); const idInput=document.getElementById('grupo-id');
-        const name=document.getElementById('nombre-grupo').value;
+      document.getElementById('form-grupo').addEventListener('submit', e => {
+        e.preventDefault();
+        const idInput = document.getElementById('grupo-id');
+        const name = document.getElementById('nombre-grupo').value;
         const checked = Array.from(document.querySelectorAll('#miembros-checkboxes input:checked'));
-        const miembros = checked.map(i=>i.parentNode.textContent.trim());
-        if(idInput.value){ const g=grupos.find(x=>x.id==idInput.value); g.name=name; g.miembros=miembros; }
-        else grupos.push({id:Date.now(),name,miembros}); renderGroups(); e.target.reset(); idInput.value=''; document.getElementById('miembros-seleccionados').value='';
+        const miembros = checked.map(i => i.parentNode.textContent.trim());
+        if (idInput.value) {
+          const g = grupos.find(x => x.id == idInput.value);
+          g.name = name; g.miembros = miembros;
+        } else {
+          grupos.push({ id: Date.now(), name, miembros });
+        }
+        renderGroups();
+        e.target.reset(); idInput.value = '';
+        document.getElementById('miembros-seleccionados').value = '';
       });
-      function renderGroups(){
-        const list=document.getElementById('lista-grupos'); list.innerHTML='';
-        grupos.forEach(g=>{ const li=document.createElement('li'); li.innerHTML=`<strong>${g.name}</strong>: ${g.miembros.join(', ')} <button data-id="${g.id}" class="edit-grupo">Editar</button>`; list.appendChild(li); });
-        document.querySelectorAll('.edit-grupo').forEach(btn=>btn.addEventListener('click',()=>{const g=grupos.find(x=>x.id==btn.dataset.id);document.getElementById('grupo-id').value=g.id;document.getElementById('nombre-grupo').value=g.name;populateGroupCheckboxes();Array.from(document.querySelectorAll('#miembros-checkboxes input')).forEach(i=>i.checked=g.miembros.includes(i.parentNode.textContent.trim()));updateSelectedMembers();}));
+
+      function renderGroups() {
+        const list = document.getElementById('lista-grupos'); list.innerHTML = '';
+        grupos.forEach(g => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${g.name}</strong>: ${g.miembros.join(', ')} <button data-id="${g.id}" class="edit-grupo">Editar</button>`;
+          list.appendChild(li);
+        });
+        document.querySelectorAll('.edit-grupo').forEach(btn => btn.addEventListener('click', () => {
+          const g = grupos.find(x => x.id == btn.dataset.id);
+          document.getElementById('grupo-id').value = g.id;
+          document.getElementById('nombre-grupo').value = g.name;
+          populateGroupCheckboxes();
+          Array.from(document.querySelectorAll('#miembros-checkboxes input')).forEach(i => i.checked = g.miembros.includes(i.parentNode.textContent.trim()));
+          updateSelectedMembers();
+        }));
       }
+
       // Bautismo
-      document.getElementById('form-bautismo').addEventListener('submit', e=>{e.preventDefault();const sel=document.getElementById('bautizo-contacto');document.getElementById('lista-bautismos').innerHTML+=`<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('bautizo-fecha').value}</li>`;e.target.reset();});
+      document.getElementById('form-bautismo').addEventListener('submit', e => {
+        e.preventDefault();
+        const sel = document.getElementById('bautizo-contacto');
+        document.getElementById('lista-bautismos').innerHTML +=
+          `<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('bautizo-fecha').value}</li>`;
+        e.target.reset();
+      });
+
       // Reportes
-      document.getElementById('add-report').addEventListener('click',()=>{const f=document.getElementById('form-reporte');f.style.display=f.style.display==='block'?'none':'block';});
-      document.getElementById('save-reporte').addEventListener('click',()=>{const sel=document.getElementById('reporte-contacto'),txt=document.getElementById('reporte-texto').value;document.getElementById('lista-reportes').innerHTML+=`<li>${sel.options[sel.selectedIndex].text}: ${txt}</li>`;document.getElementById('form-reporte').style.display='none';});
+      document.getElementById('add-report').addEventListener('click', () => {
+        const f = document.getElementById('form-reporte');
+        f.style.display = f.style.display === 'block' ? 'none' : 'block';
+      });
+      document.getElementById('save-reporte').addEventListener('click', () => {
+        const sel = document.getElementById('reporte-contacto');
+        const txt = document.getElementById('reporte-texto').value;
+        document.getElementById('lista-reportes').innerHTML +=
+          `<li>${sel.options[sel.selectedIndex].text}: ${txt}</li>`;
+        document.getElementById('form-reporte').style.display = 'none';
+      });
+
       // Calendario
-      document.getElementById('form-evento').addEventListener('submit', e=>{e.preventDefault();const n=document.getElementById('nombre-evento').value;document.getElementById('lista-eventos').innerHTML+=`<li>${n} - ${document.getElementById('fecha-evento').value}</li>`;e.target.reset();});
+      document.getElementById('form-evento').addEventListener('submit', e => {
+        e.preventDefault();
+        const n = document.getElementById('nombre-evento').value;
+        document.getElementById('lista-eventos').innerHTML +=
+          `<li>${n} - ${document.getElementById('fecha-evento').value}</li>`;
+        e.target.reset();
+      });
+
       // Estadística
       function renderChart() {
         const totalContactos = contactos.length;
-        const totalAcepto = contactos.filter(c=>c.aceptoCristo).length;
-        const totalBautizados = contactos.filter(c=>c.bautizado).length;
+        const totalAcepto = contactos.filter(c => c.aceptoCristo).length;
+        const totalBautizados = contactos.filter(c => c.bautizado).length;
         const ctx = document.getElementById('chart-estadistica').getContext('2d');
-        if(window._chart) window._chart.destroy();
+        if (window._chart) window._chart.destroy();
         window._chart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -214,8 +302,6 @@
           },
           options: { responsive:true, maintainAspectRatio:false }
         });
-      }
-      document.getElementById('mes-estadistica').addEventListener('change', renderChart);
       }
       document.getElementById('mes-estadistica').addEventListener('change', renderChart);
     });
