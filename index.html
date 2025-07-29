@@ -17,15 +17,14 @@
     .sidebar { position: fixed; top: 0; left: 0; width: 200px; height: 100vh; background: #0052cc; display: flex; flex-direction: column; align-items: center; padding-top: 1rem; z-index: 1000; }
     .sidebar img { width: 60px; margin-bottom: 1rem; border-radius: 8px; }
     .btn-nav { width:100%; background:none; color:#fff; border:none; text-align:left; padding:0.75rem 1rem; cursor:pointer; display:flex; align-items:center; transition:background 0.2s; }
-    .btn-nav .material-icons { margin-right:8px; }
-    .btn-nav.active, .btn-nav:hover { background:#003d99; }
+    .btn-nav:hover, .btn-nav.active { background:#003d99; }
     .content { margin-left:200px; padding:1rem; }
     .section { display:none; }
     .section.active { display:block; }
     table { width:100%; border-collapse:collapse; margin-bottom:1rem; }
     th, td { border:1px solid #ccc; padding:0.5rem; }
     form select, form input, form textarea, form button { width:100%; padding:0.5rem; margin-bottom:0.75rem; border:1px solid #ccc; border-radius:4px; }
-    @media (max-width:768px) { .sidebar { width:100%; height:auto; flex-direction:row; overflow-x:auto; } .content { margin-left:0; padding-top:4rem; } }
+    @media (max-width:768px) { .sidebar { width:100%; flex-direction:row; overflow-x:auto; } .content { margin-left:0; padding-top:4rem; } }
   </style>
 </head>
 <body>
@@ -40,10 +39,9 @@
     <button data-section="reportes" class="btn-nav"><span class="material-icons">description</span>Reportes</button>
     <button data-section="calendario" class="btn-nav"><span class="material-icons">calendar_month</span>Calendario</button>
   </aside>
-
   <main class="content">
     <section id="splash" class="section active">
-      <img src="/app-Evangebla/splash.png" alt="Splash Evangelismo" style="width:100%;max-width:400px;margin-bottom:1rem;" />
+      <img src="/app-Evangebla/splash.png" alt="Splash" style="width:100%;max-width:400px;margin-bottom:1rem;" />
       <h2>Bienvenido a EVANG_EBLA</h2>
     </section>
     <section id="registro" class="section">
@@ -81,8 +79,12 @@
       <h2>Grupos y Discipulados</h2>
       <form id="form-grupo">
         <input type="hidden" id="grupo-id" />
+        <label>Nombre del Grupo:</label>
         <input id="nombre-grupo" placeholder="Nombre del Grupo" required />
-        <select id="miembros-grupo" multiple><option value="">Selecciona miembros</option></select>
+        <label>Selecciona Miembros:</label>
+        <select id="miembros-grupo" multiple></select>
+        <label>Miembros en el Grupo:</label>
+        <textarea id="miembros-seleccionados" rows="3" readonly></textarea>
         <button type="submit">Guardar Grupo</button>
       </form>
       <ul id="lista-grupos"></ul>
@@ -97,13 +99,13 @@
       <ul id="lista-bautismos"></ul>
     </section>
     <section id="reportes" class="section">
-      <h2>Reportes y Estadísticas</h2>
+      <h2>Reportes</h2>
       <button id="add-report">Agregar Reporte</button>
       <div id="form-reporte" style="display:none; margin-top:1rem;">
-        <select id="reporte-contacto"><option value="">Selecciona contacto</option></select>
+        <select id="reporte-contacto"></select>
         <textarea id="reporte-texto" placeholder="Describe la comunicación"></textarea>
-        <button id="save-reporte">Guardar Reporte</button>
-      </ul>
+        <button id="save-reporte">Guardar</button>
+      </div>
       <ul id="lista-reportes"></ul>
     </section>
     <section id="calendario" class="section">
@@ -117,86 +119,68 @@
     </section>
   </main>
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    window.contactos = window.contactos || [];
-    const contactos = window.contactos;
-    const grupos = [];
-        // Navegación entre secciones
-    document.querySelectorAll('aside .btn-nav[data-section]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Activar clase activa
-        document.querySelectorAll('aside .btn-nav').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        // Mostrar sección correspondiente
-        const secId = btn.dataset.section;
-        document.querySelectorAll('main .section').forEach(sec => {
-          sec.classList.toggle('active', sec.id === secId);
+    document.addEventListener('DOMContentLoaded', () => {
+      window.contactos = window.contactos || [];
+      const contactos = window.contactos;
+      const grupos = [];
+      // Navegación
+      document.querySelectorAll('aside .btn-nav[data-section]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('aside .btn-nav').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const secId = btn.dataset.section;
+          document.querySelectorAll('main .section').forEach(sec => sec.classList.toggle('active', sec.id === secId));
+          // Poblar selects
+          if (secId === 'seguimiento') poblarSelect('contacto-seg');
+          if (secId === 'grupos') { poblarSelect('miembros-grupo'); actualizarMiembrosSeleccionados(); }
+          if (secId === 'bautismo') poblarSelect('bautizo-contacto');
+          if (secId === 'reportes') poblarSelect('reporte-contacto');
         });
       });
-    });
-    });
-    function poblarSelect(id) {
-      const sel = document.getElementById(id);
-      sel.innerHTML = '<option value="">Selecciona contacto</option>';
-      contactos.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`);
-    }
-    document.getElementById('form-contacto').addEventListener('submit', e => {
-      e.preventDefault(); const f=e.target;
-      contactos.push({ id:Date.now(), nombre:f.nombre.value });
-      document.getElementById('lista-contactos').innerHTML += `<tr><td>${f.nombre.value}</td><td>${f.edad.value}</td><td>${f.telefono.value}</td><td>${f.genero.value}</td><td>${f.ubicacion.value}</td></tr>`;
-      f.reset();
-    });
-    document.getElementById('form-seguimiento').addEventListener('submit', e => {
-      e.preventDefault(); const sel=document.getElementById('contacto-seg');
-      document.getElementById('lista-seguimiento').innerHTML += `<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('fecha-seg').value}</li>`;
-      e.target.reset();
-    });
-    const formGrupo = document.getElementById('form-grupo');
-    formGrupo.addEventListener('submit', e => {
-      e.preventDefault(); const idInput=document.getElementById('grupo-id');
-      const name=document.getElementById('nombre-grupo').value;
-      const sel=document.getElementById('miembros-grupo');
-      const miembros=Array.from(sel.selectedOptions).map(o=>o.text);
-      if(idInput.value) {
-        const g=grupos.find(x=>x.id==idInput.value); g.name=name; g.miembros=miembros;
-      } else grupos.push({ id:Date.now(), name, miembros });
-      renderGrupos();
-      formGrupo.reset(); idInput.value='';
-    });
-    function renderGrupos() {
-      const list=document.getElementById('lista-grupos'); list.innerHTML='';
-      grupos.forEach(g=>{
-        const li=document.createElement('li');
-        li.innerHTML=`<strong>${g.name}</strong>: ${g.miembros.join(', ')} <button data-id="${g.id}" class="edit-grupo">Editar</button>`;
-        list.appendChild(li);
+      function poblarSelect(id) {
+        const sel = document.getElementById(id);
+        sel.innerHTML = '<option value="">Selecciona contacto</option>';
+        contactos.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`);
+      }
+      function actualizarMiembrosSeleccionados() {
+        const sel = document.getElementById('miembros-grupo');
+        document.getElementById('miembros-seleccionados').value = Array.from(sel.selectedOptions).map(o => o.text).join(', ');
+      }
+      // Registro
+      document.getElementById('form-contacto').addEventListener('submit', e => {
+        e.preventDefault(); const f = e.target;
+        contactos.push({ id: Date.now(), nombre: f.nombre.value, edad: f.edad.value, telefono: f.telefono.value, genero: f.genero.value, ubicacion: f.ubicacion.value });
+        document.getElementById('lista-contactos').innerHTML += `<tr><td>${f.nombre.value}</td><td>${f.edad.value}</td><td>${f.telefono.value}</td><td>${f.genero.value}</td><td>${f.ubicacion.value}</td></tr>`;
+        f.reset();
       });
-      document.querySelectorAll('.edit-grupo').forEach(btn=>btn.addEventListener('click', ()=>{
-        const g=grupos.find(x=>x.id==btn.dataset.id);
-        document.getElementById('grupo-id').value=g.id;
-        document.getElementById('nombre-grupo').value=g.name;
-        poblarSelect('miembros-grupo');
-        Array.from(document.getElementById('miembros-grupo').options).forEach(o=>o.selected=g.miembros.includes(o.text));
-      }));
-    }
-    document.getElementById('form-bautismo').addEventListener('submit', e=>{
-      e.preventDefault(); const sel=document.getElementById('bautizo-contacto');
-      document.getElementById('lista-bautismos').innerHTML+=`<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('bautizo-fecha').value}</li>`;
-      e.target.reset();
-    });
-    document.getElementById('add-report').addEventListener('click', ()=>{
-      document.getElementById('form-reporte').style.display=document.getElementById('form-reporte').style.display==='block'?'none':'block';
-    });
-    document.getElementById('save-reporte').addEventListener('click', ()=>{
-      const sel=document.getElementById('reporte-contacto'), txt=document.getElementById('reporte-texto').value;
-      document.getElementById('lista-reportes').innerHTML+=`<li>${sel.options[sel.selectedIndex].text}: ${txt}</li>`;
-      document.getElementById('form-reporte').style.display='none';
-    });
-    document.getElementById('form-evento').addEventListener('submit', e=>{
-      e.preventDefault(); const n=document.getElementById('nombre-evento').value;
-      document.getElementById('lista-eventos').innerHTML+=`<li>${n} - ${document.getElementById('fecha-evento').value}</li>`;
-      e.target.reset();
-    });
-  });
-  </script>
-</body>
-</html>
+      // Seguimiento
+      document.getElementById('form-seguimiento').addEventListener('submit', e => {
+        e.preventDefault();
+        const sel = document.getElementById('contacto-seg');
+        document.getElementById('lista-seguimiento').innerHTML += `<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('fecha-seg').value}</li>`;
+        e.target.reset();
+      });
+      // Grupos
+      document.getElementById('form-grupo').addEventListener('submit', e => {
+        e.preventDefault(); const idInput = document.getElementById('grupo-id');
+        const name = document.getElementById('nombre-grupo').value;
+        const sel = document.getElementById('miembros-grupo');
+        const miembros = Array.from(sel.selectedOptions).map(o => o.text);
+        if (idInput.value) {
+          const g = grupos.find(x => x.id == idInput.value); g.name = name; g.miembros = miembros;
+        } else { grupos.push({ id: Date.now(), name, miembros }); }
+        renderGrupos(); e.target.reset(); idInput.value = ''; document.getElementById('miembros-seleccionados').value = '';
+      });
+      function renderGrupos() {
+        const list = document.getElementById('lista-grupos'); list.innerHTML = '';
+        grupos.forEach(g => {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${g.name}</strong>: ${g.miembros.join(', ')} <button data-id="${g.id}" class="edit-grupo">Editar</button>`;
+          list.appendChild(li);
+        });
+        document.querySelectorAll('.edit-grupo').forEach(btn => btn.addEventListener('click', () => {
+          const g = grupos.find(x => x.id == btn.dataset.id);
+          document.getElementById('grupo-id').value = g.id;
+          document.getElementById('nombre-grupo').value = g.name;
+          poblarSelect('miembros-grupo');
+          Array.from(document.getElementById('miembros-grupo').options).for```
