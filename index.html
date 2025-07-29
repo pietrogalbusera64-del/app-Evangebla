@@ -2,60 +2,112 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0052CC">
-  <link rel="manifest" href="/app-Evangebla/manifest.json">
-  <link rel="apple-touch-icon" href="/app-Evangebla/icon.png">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EVANG_EBLA</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: Arial, sans-serif; }
-    .sidebar { position: fixed; top: 0; left: 0; width: 200px; height: 100vh; background: #0052cc; display: flex; flex-direction: column; align-items: center; padding-top: 1rem; z-index: 1000; }
-    .sidebar img { width: 60px; margin-bottom: 1rem; border-radius: 8px; }
-    .btn-nav { width: 100%; background: none; color: #fff; border: none; text-align: left; padding: 0.75rem 1rem; cursor: pointer; display: flex; align-items: center; transition: background 0.2s; }
-    .btn-nav:hover, .btn-nav.active { background: #003d99; }
-    .content { margin-left: 200px; padding: 1rem; }
+    body { margin: 0; font-family: Arial, sans-serif; display: flex; }
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 60px; height: 100vh;
+      background: #0052cc; display: flex; flex-direction: column;
+      align-items: center; padding: 0.5rem 0; transition: width 0.3s;
+    }
+    .sidebar:hover { width: 200px; }
+    .sidebar img { width: 40px; margin-bottom:1rem; }
+    .btn-nav {
+      width: 100%; background: none; color: #fff; border: none;
+      display: flex; align-items: center; padding: 0.5rem;
+      cursor: pointer; overflow: hidden;
+    }
+    .btn-nav .material-icons { margin-right: 0.5rem; }
+    .btn-nav span { white-space: nowrap; }
+    .btn-nav.active, .btn-nav:hover { background: #003d99; }
+    .content {
+      margin-left: 60px; padding: 1rem; flex: 1;
+      transition: margin-left 0.3s;
+    }
+    .sidebar:hover ~ .content { margin-left: 200px; }
     .section { display: none; }
     .section.active { display: block; }
-    #miembros-checkboxes label { display: block; }
-    .chart-container { position: relative; width: 100%; height: 0; padding-bottom: 56.25%; }
+    /* responsive chart container */
+    .chart-container { position: relative; width: 100%; height: 0; padding-bottom: 50%; }
     .chart-container canvas { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
-    @media (max-width: 768px) {
-      .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; }
-      .content { margin-left: 0; padding-top: 4rem; }
-    }
   </style>
 </head>
 <body>
   <aside class="sidebar">
     <img src="/app-Evangebla/icon.png" alt="Icono" />
-    <button data-section="splash" class="btn-nav active"><span class="material-icons">home</span>Inicio</button>
-    <button data-section="registro" class="btn-nav"><span class="material-icons">person_add</span>Registro</button>
-    <button data-section="historial" class="btn-nav"><span class="material-icons">history</span>Historial</button>
-    <button data-section="seguimiento" class="btn-nav"><span class="material-icons">track_changes</span>Seguimiento</button>
-    <button data-section="grupos" class="btn-nav"><span class="material-icons">group</span>Grupos</button>
-    <button data-section="bautismo" class="btn-nav"><span class="material-icons">water_drop</span>Bautismo</button>
-    <button data-section="reportes" class="btn-nav"><span class="material-icons">description</span>Reportes</button>
-    <button data-section="calendario" class="btn-nav"><span class="material-icons">calendar_month</span>Calendario</button>
-    <button data-section="estadistica" class="btn-nav"><span class="material-icons">bar_chart</span>Estadística</button>
+    <button data-section="splash" class="btn-nav active"><i class="material-icons">home</i><span>Inicio</span></button>
+    <button data-section="registro" class="btn-nav"><i class="material-icons">person_add</i><span>Registro</span></button>
+    <button data-section="historial" class="btn-nav"><i class="material-icons">history</i><span>Historial</span></button>
+    <button data-section="seguimiento" class="btn-nav"><i class="material-icons">track_changes</i><span>Seguimiento</span></button>
+    <button data-section="grupos" class="btn-nav"><i class="material-icons">group</i><span>Grupos</span></button>
+    <button data-section="bautismo" class="btn-nav"><i class="material-icons">water_drop</i><span>Bautismo</span></button>
+    <button data-section="reportes" class="btn-nav"><i class="material-icons">description</i><span>Reportes</span></button>
+    <button data-section="calendario" class="btn-nav"><i class="material-icons">calendar_month</i><span>Calendario</span></button>
+    <button data-section="estadistica" class="btn-nav"><i class="material-icons">bar_chart</i><span>Estadística</span></button>
   </aside>
 
   <main class="content">
-    <!-- Sections here, unchanged -->
+    <section id="splash" class="section active">
+      <h2>Bienvenido a EVANG_EBLA</h2>
+    </section>
+    <section id="registro" class="section">
+      <h2>Registro de Contacto</h2>
+      <!-- formulario -->
+    </section>
+    <section id="historial" class="section">
+      <h2>Historial de Contactos</h2>
+      <!-- tabla -->
+    </section>
+    <section id="seguimiento" class="section">
+      <h2>Seguimiento</h2>
+      <!-- seguimiento -->
+    </section>
+    <section id="grupos" class="section">
+      <h2>Grupos y Discipulados</h2>
+      <!-- grupos -->
+    </section>
+    <section id="bautismo" class="section">
+      <h2>Calendario de Bautismo</h2>
+      <!-- bautismo -->
+    </section>
+    <section id="reportes" class="section">
+      <h2>Reportes</h2>
+      <!-- reportes -->
+    </section>
+    <section id="calendario" class="section">
+      <h2>Calendario</h2>
+      <!-- calendario -->
+    </section>
+    <section id="estadistica" class="section">
+      <h2>Estadística de Datos</h2>
+      <label>Mes: <input type="month" id="mes-estadistica" /></label>
+      <div class="chart-container"><canvas id="chart-estadistica"></canvas></div>
+    </section>
   </main>
 
   <script>
-    const sections = document.querySelectorAll('main .section');
-    const navButtons = document.querySelectorAll('aside .btn-nav[data-section]');
-    function showSection(id) {
-      sections.forEach(sec => sec.classList.toggle('active', sec.id === id));
-      navButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.section === id));
-    }
-    navButtons.forEach(btn => btn.addEventListener('click', () => showSection(btn.dataset.section)));
-    // Upon load, ensure splash is visible
-    showSection('splash');
+    document.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('.section');
+      const navs = document.querySelectorAll('.btn-nav');
+      navs.forEach(btn => btn.addEventListener('click', () => {
+        const target = btn.dataset.section;
+        navs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        sections.forEach(sec => sec.classList.toggle('active', sec.id === target));
+        if (target === 'estadistica') renderStats();
+      }));
+      function renderStats() {
+        const ctx = document.getElementById('chart-estadistica').getContext('2d');
+        if (window._chart) window._chart.destroy();
+        // ejemplo de datos
+        window._chart = new Chart(ctx, { type:'bar', data:{ labels:['Contactos','Cristo','Bautizados'], datasets:[{ data:[10,5,3] }] }, options:{ responsive:true, maintainAspectRatio:false } });
+      }
+      // show splash by default
+      document.querySelector('.btn-nav.active').click();
+    });
   </script>
 </body>
 </html>
