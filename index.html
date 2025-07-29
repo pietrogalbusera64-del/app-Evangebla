@@ -8,7 +8,6 @@
   <link rel="apple-touch-icon" href="/app-Evangebla/icon.png">
   <!-- Google Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- Chart.js y librerías -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -50,41 +49,42 @@
   </aside>
 
   <main class="content">
-    <!-- ... todas las secciones previas ... -->
+    <section id="splash" class="section active">
+      <h2>Bienvenido a EVANG_EBLA</h2>
+    </section>
     <section id="registro" class="section">
       <h2>Registro de Contacto</h2>
       <form id="form-contacto">
         <input type="text" name="nombre" placeholder="Nombre" required />
         <input type="number" name="edad" placeholder="Edad" required />
         <input type="tel" name="telefono" placeholder="Teléfono" required />
-        <select name="genero" required><option value="">Género</option><option>Masculino</option><option>Femenino</option></select>
-        <input type="text" name="ubicacion" placeholder="Ubicación" />
+        <select name="genero" required>
+          <option value="">Género</option><option>Masculino</option><option>Femenino</option>
+        </select>
         <label><input type="checkbox" name="aceptoCristo" /> Aceptó a Cristo</label>
         <label><input type="checkbox" name="bautizado" /> Bautizado</label>
         <label><input type="checkbox" name="discipulado" /> Desea discipulado</label>
-        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Guardar</button>
+        <button type="submit" class="btn-nav"><span class="material-icons">save</span>Guardar</button>
       </form>
     </section>
-    <!-- ... otras secciones ... -->
+    <!-- Resto de secciones omitidas por brevedad -->
     <section id="reportes" class="section">
       <h2>Reportes y Estadísticas</h2>
-      <label for="mes-select">Mes:</label><input type="month" id="mes-select" />
-      <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
-      <button id="add-report" class="btn-nav" type="button"><span class="material-icons">add_circle</span>Reporte</button>
+      <button id="add-report" class="btn-nav"><span class="material-icons">add_circle</span>Reporte</button>
       <div id="form-reporte" style="display:none; margin-top:1rem;">
         <select id="reporte-contacto"><option value="">Selecciona Miembro</option></select>
         <textarea id="reporte-texto" placeholder="Describe la comunicación"></textarea>
-        <button id="save-reporte" class="btn-nav" type="button"><span class="material-icons">save</span>Guardar Reporte</button>
+        <button id="save-reporte" class="btn-nav"><span class="material-icons">save</span>Guardar Reporte</button>
       </div>
       <ul id="lista-reportes"></ul>
     </section>
   </main>
 
   <script>
-    // Datos de contactos en memoria
+    // Datos de contactos
     window.contactos = [];
 
-    // Navegación entre secciones
+    // Manejo de navegación
     document.querySelectorAll('aside .btn-nav[data-section]').forEach(btn => {
       btn.addEventListener('click', e => {
         e.preventDefault();
@@ -95,27 +95,21 @@
         if(sec === 'reportes') toggleReportForm();
       });
     });
-    });
 
-    // Al registrar contacto, añadir a contactos
+    // Registro de nuevos contactos
     document.getElementById('form-contacto').addEventListener('submit', e => {
       e.preventDefault();
-      const form = e.target;
-      const nuevo = {
-        id: Date.now(),
-        nombre: form.nombre.value,
-        edad: form.edad.value,
-        telefono: form.telefono.value
-      };
+      const f = e.target;
+      const nuevo = { id: Date.now(), nombre: f.nombre.value };
       window.contactos.push(nuevo);
       alert('Contacto guardado: ' + nuevo.nombre);
-      form.reset();
+      f.reset();
     });
 
-    // Toggle y carga de reporte
+    // Toggle de reporte
     function toggleReportForm() {
       if(window.contactos.length === 0) {
-        alert('No hay contactos registrados. Por favor, registra primero un contacto.');
+        alert('No hay contactos registrados.');
         return;
       }
       const form = document.getElementById('form-reporte');
@@ -123,7 +117,12 @@
       if(form.style.display === 'block') {
         const sel = document.getElementById('reporte-contacto');
         sel.innerHTML = '<option value="">Selecciona Miembro</option>';
-        window.contactos.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`);
+        window.contactos.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = c.nombre;
+          sel.appendChild(opt);
+        });
       }
     }
 
