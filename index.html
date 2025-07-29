@@ -22,7 +22,16 @@
     .section.active { display:block; }
     .chart-container { position:relative; width:100%; height:0; padding-bottom:50%; }
     .chart-container canvas { position:absolute; top:0; left:0; width:100% !important; height:100% !important; }
-    form input, form select, form textarea, form button, form label { width:100%; padding:0.5rem; margin-bottom:0.75rem; border:1px solid #ccc; border-radius:4px; }
+    form input, form select, form textarea, form button {
+      width: 100%; padding: 0.5rem; margin-bottom: 0.75rem; border: 1px solid #ccc; border-radius: 4px;
+    }
+    /* Labels for checkboxes in forms should not expand full width */
+    form label {
+      display: inline-flex; align-items: center; width: auto; margin-bottom: 0.5rem; cursor: pointer;
+    }
+    form label input[type="checkbox"] {
+      margin-right: 0.5rem;
+    }
     table { width:100%; border-collapse:collapse; margin-bottom:1rem; }
     th, td { border:1px solid #ccc; padding:0.5rem; }
   </style>
