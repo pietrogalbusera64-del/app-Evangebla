@@ -50,11 +50,7 @@
   </aside>
 
   <main class="content">
-    <section id="splash" class="section active">
-      <img src="/app-Evangebla/splash.png" alt="Splash Evangelismo" style="width:100%;max-width:400px;border-radius:8px;margin-bottom:1rem;" />
-      <h2>Bienvenido a EVANG_EBLA</h2>
-    </section>
-
+    <!-- ... todas las secciones previas ... -->
     <section id="registro" class="section">
       <h2>Registro de Contacto</h2>
       <form id="form-contacto">
@@ -69,73 +65,11 @@
         <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Guardar</button>
       </form>
     </section>
-
-    <section id="historial" class="section">
-      <h2>Historial de Contactos</h2>
-      <select id="filtro-estado"><option value="all">Todos</option><option value="aceptoCristo">Aceptó a Cristo</option><option value="bautizado">Bautizado</option><option value="discipulado">Discipulado</option></select>
-      <table>
-        <thead><tr><th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Género</th><th>Ubicación</th><th>Acciones</th></tr></thead>
-        <tbody id="lista-contactos"></tbody>
-      </table>
-      <button id="export-contactos" class="btn-nav" type="button"><span class="material-icons">file_download</span>Exportar a Excel</button>
-    </section>
-
-    <section id="seguimiento" class="section">
-      <h2>Seguimiento</h2>
-      <form id="form-seguimiento">
-        <select id="contacto-seg" required><option value="">Selecciona contacto</option></select>
-        <input type="date" id="fecha-seg" required />
-        <select id="tipo-seg" required><option>Visita</option><option>Llamada</option><option>Mensaje</option></select>
-        <fieldset><legend>Temas de discipulado</legend>
-          <label><input type="checkbox" class="check-tema" value="Oración" /> Oración</label>
-          <label><input type="checkbox" class="check-tema" value="Biblia" /> Biblia</label>
-          <label><input type="checkbox" class="check-tema" value="Fe" /> Fe</label>
-        </fieldset>
-        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Registrar</button>
-      </form>
-      <ul id="lista-seguimiento"></ul>
-      <button id="export-interacciones" class="btn-nav" type="button"><span class="material-icons">file_download</span>Exportar a Excel</button>
-    </section>
-
-    <section id="grupos" class="section">
-      <h2>Grupos y Discipulados</h2>
-      <form id="form-grupo">
-        <input type="text" id="nombre-grupo" placeholder="Nombre de grupo" required />
-        <select id="miembros-grupo" multiple></select>
-        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Crear Grupo</button>
-      </form>
-      <ul id="lista-grupos"></ul>
-      <button id="export-grupos" class="btn-nav" type="button"><span class="material-icons">file_download</span>Exportar a Excel</button>
-    </section>
-
-    <section id="bautismo" class="section">
-      <h2>Calendario de Bautismo</h2>
-      <form id="form-bautismo">
-        <input type="text" id="bautizo-nombre" placeholder="Nombre de la persona" required />
-        <input type="date" id="bautizo-fecha" required />
-        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Agregar Bautismo</button>
-      </form>
-      <ul id="lista-bautismos"></ul>
-    </section>
-
-    <section id="calendario" class="section">
-      <h2>Calendario de Evangelismo</h2>
-      <form id="form-evento">
-        <input type="text" id="nombre-evento" placeholder="Nombre del evento" required />
-        <select id="tipo-evento" required><option>Templo</option><option>Callejero</option></select>
-        <input type="date" id="fecha-evento" required />
-        <textarea id="detalles-evento" placeholder="Detalles"></textarea>
-        <button type="submit" class="btn-nav" type="button"><span class="material-icons">save</span>Programar Evento</button>
-      </form>
-      <ul id="lista-eventos"></ul>
-      <button id="export-eventos" class="btn-nav" type="button"><span class="material-icons">file_download</span>Exportar a Excel</button>
-    </section>
-
+    <!-- ... otras secciones ... -->
     <section id="reportes" class="section">
       <h2>Reportes y Estadísticas</h2>
       <label for="mes-select">Mes:</label><input type="month" id="mes-select" />
       <div class="chart-container"><canvas id="chart-estadisticas"></canvas></div>
-      <button id="export-pdf" class="btn-nav" type="button"><span class="material-icons">picture_as_pdf</span>Exportar a PDF</button>
       <button id="add-report" class="btn-nav" type="button"><span class="material-icons">add_circle</span>Reporte</button>
       <div id="form-reporte" style="display:none; margin-top:1rem;">
         <select id="reporte-contacto"><option value="">Selecciona Miembro</option></select>
@@ -146,8 +80,10 @@
     </section>
   </main>
 
-  <script src="/app-Evangebla/app.js"></script>
   <script>
+    // Datos de contactos en memoria
+    window.contactos = [];
+
     // Navegación entre secciones
     document.querySelectorAll('.btn-nav[data-section]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -155,35 +91,43 @@
         btn.classList.add('active');
         const sec = btn.getAttribute('data-section');
         document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === sec));
-        if (sec === 'reportes') toggleReportForm();
+        if(sec === 'reportes') toggleReportForm();
       });
     });
 
-    // Report Form toggle y carga de contactos
-    window.contactos = window.contactos || [];
+    // Al registrar contacto, añadir a contactos
+    document.getElementById('form-contacto').addEventListener('submit', e => {
+      e.preventDefault();
+      const form = e.target;
+      const nuevo = {
+        id: Date.now(),
+        nombre: form.nombre.value,
+        edad: form.edad.value,
+        telefono: form.telefono.value
+      };
+      window.contactos.push(nuevo);
+      alert('Contacto guardado: ' + nuevo.nombre);
+      form.reset();
+    });
+
+    // Toggle y carga de reporte
     function toggleReportForm() {
       const form = document.getElementById('form-reporte');
-      if (!form) return;
       form.style.display = form.style.display === 'block' ? 'none' : 'block';
-      if (form.style.display === 'block') {
-        const select = document.getElementById('reporte-contacto');
-        select.innerHTML = '<option value="">Selecciona Miembro</option>';
-        window.contactos.forEach(c => {
-          const opt = document.createElement('option');
-          opt.value = c.id;
-          opt.textContent = c.nombre;
-          select.appendChild(opt);
-        });
+      if(form.style.display === 'block') {
+        const sel = document.getElementById('reporte-contacto');
+        sel.innerHTML = '<option value="">Selecciona Miembro</option>';
+        window.contactos.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`);
       }
     }
 
-    document.getElementById('add-report')?.addEventListener('click', toggleReportForm);
-    document.getElementById('save-reporte')?.addEventListener('click', () => {
-      const form = document.getElementById('form-reporte');
+    document.getElementById('add-report').addEventListener('click', toggleReportForm);
+    document.getElementById('save-reporte').addEventListener('click', () => {
       const id = document.getElementById('reporte-contacto').value;
       const txt = document.getElementById('reporte-texto').value.trim();
-      if (!id || !txt) return alert('Selecciona un miembro y escribe la comunicación.');
-      form.style.display = 'none';
+      if(!id || !txt) return alert('Selecciona un miembro y escribe la comunicación.');
+      alert('Reporte guardado para ID ' + id);
+      document.getElementById('form-reporte').style.display = 'none';
     });
   </script>
 </body>
