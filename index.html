@@ -5,34 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EVANG_EBLA</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; font-family: Arial, sans-serif; display: flex; }
-    .sidebar {
-      position: fixed; top: 0; left: 0; width: 60px; height: 100vh;
-      background: #0052cc; display: flex; flex-direction: column;
-      align-items: center; padding: 0.5rem 0; transition: width 0.3s;
-    }
-    .sidebar:hover { width: 200px; }
-    .sidebar img { width: 40px; margin-bottom:1rem; }
-    .btn-nav {
-      width: 100%; background: none; color: #fff; border: none;
-      display: flex; align-items: center; padding: 0.5rem;
-      cursor: pointer; overflow: hidden;
-    }
-    .btn-nav .material-icons { margin-right: 0.5rem; }
-    .btn-nav span { white-space: nowrap; }
-    .btn-nav.active, .btn-nav:hover { background: #003d99; }
-    .content {
-      margin-left: 60px; padding: 1rem; flex: 1;
-      transition: margin-left 0.3s;
-    }
-    .sidebar:hover ~ .content { margin-left: 200px; }
-    .section { display: none; }
-    .section.active { display: block; }
-    /* responsive chart container */
-    .chart-container { position: relative; width: 100%; height: 0; padding-bottom: 50%; }
-    .chart-container canvas { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
+    .sidebar { position: fixed; top:0; left:0; width:60px; height:100vh; background:#0052cc; display:flex; flex-direction:column; align-items:center; padding:0.5rem 0; transition:width 0.3s; }
+    .sidebar:hover { width:200px; }
+    .sidebar img { width:40px; margin-bottom:1rem; }
+    .btn-nav { width:100%; background:none; color:#fff; border:none; display:flex; align-items:center; padding:0.5rem; cursor:pointer; overflow:hidden; }
+    .btn-nav .material-icons { margin-right:0.5rem; }
+    .btn-nav span { white-space:nowrap; }
+    .btn-nav.active, .btn-nav:hover { background:#003d99; }
+    .content { margin-left:60px; padding:1rem; flex:1; transition:margin-left 0.3s; }
+    .sidebar:hover ~ .content { margin-left:200px; }
+    .section { display:none; }
+    .section.active { display:block; }
+    .chart-container { position:relative; width:100%; height:0; padding-bottom:50%; }
+    .chart-container canvas { position:absolute; top:0; left:0; width:100% !important; height:100% !important; }
+    form input, form select, form textarea, form button, form label { width:100%; padding:0.5rem; margin-bottom:0.75rem; border:1px solid #ccc; border-radius:4px; }
+    table { width:100%; border-collapse:collapse; margin-bottom:1rem; }
+    th, td { border:1px solid #ccc; padding:0.5rem; }
   </style>
 </head>
 <body>
@@ -52,44 +44,98 @@
   <main class="content">
     <section id="splash" class="section active">
       <h2>Bienvenido a EVANG_EBLA</h2>
+      <p>Selecciona una opción del menú.</p>
     </section>
+
     <section id="registro" class="section">
       <h2>Registro de Contacto</h2>
-      <!-- formulario -->
+      <form id="form-contacto">
+        <input id="nombre" name="nombre" placeholder="Nombre" required />
+        <input id="edad" type="number" name="edad" placeholder="Edad" required />
+        <input id="telefono" name="telefono" placeholder="Teléfono" required />
+        <select id="genero" name="genero" required>
+          <option value="">Género</option><option>Masculino</option><option>Femenino</option>
+        </select>
+        <input id="ubicacion" name="ubicacion" placeholder="Ubicación" />
+        <label><input type="checkbox" id="aceptoCristo" /> Aceptó a Cristo</label>
+        <label><input type="checkbox" id="bautizado" /> Bautizado</label>
+        <button type="submit">Guardar</button>
+      </form>
     </section>
+
     <section id="historial" class="section">
       <h2>Historial de Contactos</h2>
-      <!-- tabla -->
+      <table>
+        <thead><tr><th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Género</th><th>Ubicación</th></tr></thead>
+        <tbody id="lista-contactos"></tbody>
+      </table>
     </section>
+
     <section id="seguimiento" class="section">
       <h2>Seguimiento</h2>
-      <!-- seguimiento -->
+      <form id="form-seguimiento">
+        <select id="contacto-seg"><option value="">Selecciona contacto</option></select>
+        <input id="fecha-seg" type="date" required />
+        <select id="tipo-seg"><option>Visita</option><option>Llamada</option><option>Mensaje</option></select>
+        <button type="submit">Registrar</button>
+      </form>
+      <ul id="lista-seguimiento"></ul>
     </section>
+
     <section id="grupos" class="section">
       <h2>Grupos y Discipulados</h2>
-      <!-- grupos -->
+      <form id="form-grupo">
+        <input type="hidden" id="grupo-id" />
+        <input id="nombre-grupo" placeholder="Nombre del Grupo" required />
+        <select id="miembros-grupo" multiple></select>
+        <button type="submit">Guardar Grupo</button>
+      </form>
+      <ul id="lista-grupos"></ul>
     </section>
+
     <section id="bautismo" class="section">
       <h2>Calendario de Bautismo</h2>
-      <!-- bautismo -->
+      <form id="form-bautismo">
+        <select id="bautizo-contacto"><option value="">Selecciona contacto</option></select>
+        <input id="bautizo-fecha" type="date" required />
+        <button type="submit">Agregar Bautismo</button>
+      </form>
+      <ul id="lista-bautismos"></ul>
     </section>
+
     <section id="reportes" class="section">
       <h2>Reportes</h2>
-      <!-- reportes -->
+      <button id="add-report">Agregar Reporte</button>
+      <div id="form-reporte" style="display:none;">
+        <select id="reporte-contacto"></select>
+        <textarea id="reporte-texto" placeholder="Describe la comunicación"></textarea>
+        <button id="save-reporte">Guardar</button>
+      </div>
+      <ul id="lista-reportes"></ul>
     </section>
+
     <section id="calendario" class="section">
       <h2>Calendario</h2>
-      <!-- calendario -->
+      <form id="form-evento">
+        <input id="nombre-evento" placeholder="Evento" required />
+        <input id="fecha-evento" type="date" required />
+        <button type="submit">Programar</button>
+      </form>
+      <ul id="lista-eventos"></ul>
     </section>
+
     <section id="estadistica" class="section">
       <h2>Estadística de Datos</h2>
-      <label>Mes: <input type="month" id="mes-estadistica" /></label>
+      <label>Mes:<input type="month" id="mes-estadistica" /></label>
       <div class="chart-container"><canvas id="chart-estadistica"></canvas></div>
     </section>
   </main>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      window.contactos = window.contactos || [];
+      const contactos = window.contactos;
+      const grupos = [];
       const sections = document.querySelectorAll('.section');
       const navs = document.querySelectorAll('.btn-nav');
       navs.forEach(btn => btn.addEventListener('click', () => {
@@ -97,16 +143,63 @@
         navs.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         sections.forEach(sec => sec.classList.toggle('active', sec.id === target));
+        // populate
+        if (target === 'registro') document.getElementById('form-contacto').reset();
+        if (target === 'historial');
+        if (target === 'seguimiento') populateSelect('contacto-seg');
+        if (target === 'grupos') populateSelect('miembros-grupo');
+        if (target === 'bautismo') populateSelect('bautizo-contacto');
+        if (target === 'reportes') populateSelect('reporte-contacto');
         if (target === 'estadistica') renderStats();
       }));
+      function populateSelect(id) {
+        const sel = document.getElementById(id); sel.innerHTML = '<option value="">Selecciona contacto</option>';
+        contactos.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`);
+      }
+      document.getElementById('form-contacto').addEventListener('submit', e => {
+        e.preventDefault(); const f = e.target;
+        contactos.push({ id: Date.now(), nombre: f.nombre.value, aceptoCristo: document.getElementById('aceptoCristo').checked, bautizado: document.getElementById('bautizado').checked });
+        document.getElementById('lista-contactos').innerHTML += `<tr><td>${f.nombre.value}</td><td>${f.edad.value}</td><td>${f.telefono.value}</td><td>${f.genero.value}</td><td>${f.ubicacion.value}</td></tr>`;
+        f.reset();
+      });
+      document.getElementById('form-seguimiento').addEventListener('submit', e => {
+        e.preventDefault(); const sel = document.getElementById('contacto-seg');
+        document.getElementById('lista-seguimiento').innerHTML += `<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('fecha-seg').value}</li>`;
+        e.target.reset();
+      });
+      document.getElementById('form-grupo').addEventListener('submit', e => {
+        e.preventDefault(); const name = document.getElementById('nombre-grupo').value;
+        const sel = document.getElementById('miembros-grupo'); const miembros = Array.from(sel.selectedOptions).map(o => o.text);
+        grupos.push({ id: Date.now(), name, miembros }); renderGroups(); e.target.reset();
+      });
+      function renderGroups() { const list = document.getElementById('lista-grupos'); list.innerHTML = '';
+        grupos.forEach(g => { const li = document.createElement('li'); li.textContent = `${g.name}: ${g.miembros.join(', ')}`; list.appendChild(li); }); }
+      document.getElementById('form-bautismo').addEventListener('submit', e => {
+        e.preventDefault(); const sel = document.getElementById('bautizo-contacto');
+        document.getElementById('lista-bautismos').innerHTML += `<li>${sel.options[sel.selectedIndex].text} - ${document.getElementById('bautizo-fecha').value}</li>`;
+        e.target.reset();
+      });
+      document.getElementById('add-report')?.addEventListener('click', () => {
+        const f = document.getElementById('form-reporte'); f.style.display = f.style.display === 'block' ? 'none' : 'block';
+      });
+      document.getElementById('save-reporte')?.addEventListener('click', () => {
+        const sel = document.getElementById('reporte-contacto'); const txt = document.getElementById('reporte-texto').value;
+        document.getElementById('lista-reportes').innerHTML += `<li>${sel.options[sel.selectedIndex].text}: ${txt}</li>`;
+        document.getElementById('form-reporte').style.display = 'none';
+      });
+      document.getElementById('form-evento').addEventListener('submit', e => {
+        e.preventDefault(); const n = document.getElementById('nombre-evento').value;
+        document.getElementById('lista-eventos').innerHTML += `<li>${n} - ${document.getElementById('fecha-evento').value}</li>`;
+        e.target.reset();
+      });
       function renderStats() {
+        const total = contactos.length;
+        const crist = contactos.filter(c => c.aceptoCristo).length;
+        const baut = contactos.filter(c => c.bautizado).length;
         const ctx = document.getElementById('chart-estadistica').getContext('2d');
         if (window._chart) window._chart.destroy();
-        // ejemplo de datos
-        window._chart = new Chart(ctx, { type:'bar', data:{ labels:['Contactos','Cristo','Bautizados'], datasets:[{ data:[10,5,3] }] }, options:{ responsive:true, maintainAspectRatio:false } });
+        window._chart = new Chart(ctx, { type:'bar', data:{ labels:['Contactos','Cristo','Bautizados'], datasets:[{ data:[total,crist,baut] }] }, options:{ responsive:true, maintainAspectRatio:false } });
       }
-      // show splash by default
-      document.querySelector('.btn-nav.active').click();
     });
   </script>
 </body>
